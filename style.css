@@ -1,81 +1,93 @@
-/* Basic Reset */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+  /* Basic Reset */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f7fa;
-  padding: 2rem;
-  color: #333;
-  line-height: 1.6;
-}
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fa;
+    padding: 2rem;
+    color: #333;
+    line-height: 1.6;
+  }
 
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
 
-header h1 {
-  font-size: 2rem;
-  color: #0057e7;
-}
+  header h1 {
+    font-size: 2rem;
+    color: #0057e7;
+  }
 
-header p {
-  font-size: 1.1rem;
-  color: #555;
-}
+  header p {
+    font-size: 1.1rem;
+    color: #555;
+  }
 
-main {
-  max-width: 800px;
-  margin: 0 auto;
-}
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-.input-section label,
-.results-section h2 {
-  display: block;
-  margin: 1.5rem 0 0.5rem;
-  font-weight: bold;
-}
+  .input-section label,
+  .results-section h2 {
+    display: block;
+    margin: 1.5rem 0 0.5rem;
+    font-weight: bold;
+  }
 
-textarea,
-select {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  resize: vertical;
-  margin-bottom: 1rem;
-}
+  textarea,
+  select {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+    margin-bottom: 1rem;
+  }
 
-button {
-  background-color: #0057e7;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
+  button {
+    background-color: #0057e7;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
 
-button:hover {
-  background-color: #003ea6;
-}
+  button:hover {
+    background-color: #003ea6;
+  }
 
-.results-section {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
+  .results-section {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
 
-.cover-letter textarea {
-  height: 200px;
-}
+  .cover-letter textarea {
+    height: 200px;
+  }
 
-.ats-score {
-  background: #
+  .ats-score {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-left: 5px solid #0057e7;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 4rem;
+    color: #888;
+    font-size: 0.9rem;
+  }
