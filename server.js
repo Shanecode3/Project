@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const OpenAI = require("openai");
 const path = require("path");
+const axios = require("axios");
 
 dotenv.config();
 
@@ -11,48 +11,79 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "/")));
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-// Handle POST request from frontend
 app.post("/generate", async (req, res) => {
   const { resume, jobDescription, tone } = req.body;
 
   const prompt = `
-You are an expert job assistant. Do the following:
+You are an expert job assistant. Using the resume and job description below, do the following:
 
-1. Write a tailored cover letter in a ${tone} tone using the resume and job description.
-2. Give an estimated ATS match score out of 100.
-3. Suggest 2–3 improvements to increase the match score.
+1. Write a tailored cover letter in a ${tone} tone.
+2. Give an ATS match score out of 100 (not always 85).
+3. Provide 2–3 personalized tips to improve the resume.
+
+Respond strictly in this raw JSON format, without code blocks or explanations:
+{
+  "coverLetter": "...",
+  "score": <real score>,
+  "feedback": ["...", "..."]
+}
 
 Resume:
 ${resume}
 
 Job Description:
 ${jobDescription}
-
-Respond in JSON format:
-{
-  "coverLetter": "...",
-  "score": 85,
-  "feedback": ["Missing Python", "Use stronger action verbs"]
-}
 `;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
-    });
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        model: "mistralai/mistral-small-3.2-24b-instruct",
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert job assistant. Only respond with clean JSON.",
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    const raw = completion.choices[0].message.content;
-    const json = JSON.parse(raw);
+    let raw = response.data.choices[0].message.content.trim();
+    console.log("🟢 Raw OpenRouter Response:", raw);
+
+    if (raw.startsWith("```")) {
+      raw = raw.replace(/^```[a-z]*\n?/, "").replace(/```$/, "").trim();
+    }
+
+    let json;
+    try {
+      json = JSON.parse(raw);
+    } catch (parseError) {
+      console.error("❌ JSON Parse Error:", parseError.message);
+      console.error("❌ Raw content:", raw);
+      return res.status(500).json({ error: "AI returned invalid JSON." });
+    }
+
     res.json(json);
   } catch (err) {
-    console.error("Error from OpenAI or parsing:", err.message);
-    res.status(500).json({ error: "Something went wrong." });
+    if (err.response) {
+      console.error("❌ OpenRouter Error:", err.response.status);
+      console.error("Data:", JSON.stringify(err.response.data, null, 2));
+    } else {
+      console.error("❌ Server Error:", err.message);
+    }
+    res.status(500).json({ error: "Failed to get AI response." });
   }
 });
 

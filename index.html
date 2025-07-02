@@ -14,9 +14,8 @@
 
   <main>
     <section class="input-section">
-      <label for="resume">Your Resume:</label>
-      <textarea id="resume" placeholder="Paste your resume here..."></textarea>
-
+      <label for="resumeFile">Upload Resume (PDF or Text):</label>
+      <input type="file" id="resumeFile" accept=".pdf,.txt" />
       <label for="jobDescription">Job Description:</label>
       <textarea id="jobDescription" placeholder="Paste the job description here..."></textarea>
 
@@ -28,6 +27,7 @@
       </select>
 
       <button id="generateBtn">Generate Cover Letter & Score Resume</button>
+      <button onclick="fillDemo()" class="demo">Try Demo</button>
     </section>
 
     <section class="results-section" style="display: none;">
@@ -40,6 +40,7 @@
       <div class="ats-score">
         <h2>ATS Match Report</h2>
         <p id="score">Score: --%</p>
+        <div class="score-bar"><div class="score-bar-fill"></div></div>
         <ul id="atsFeedback"></ul>
       </div>
     </section>
