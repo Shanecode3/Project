@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing – TailorMyLetter</title>
+    <link rel="stylesheet" href="pricing.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Pricing</h1>
+      <p>
+        Start with a free tailored cover letter. Pay only when you're ready.
+      </p>
+      <a href="index.html" class="back">← Back to Home</a>
+    </header>
+
+    <main>
+      <div class="pricing-container">
+        <div class="plan free">
+          <h2>Free</h2>
+          <p class="price">$0</p>
+          <ul>
+            <li>✔️ 1 Full Cover Letter</li>
+            <li>✔️ Resume ATS Score</li>
+            <li>✔️ Personalized Tips</li>
+            <li>✔️ No Signup Needed</li>
+          </ul>
+          <p class="note">Use once per device</p>
+        </div>
+
+        <div class="plan paid">
+          <h2>Pay Per Use</h2>
+          <p class="price region-price" id="priceValue">$2.99 USD</p>
+          <ul>
+            <li>✔️ New Cover Letter & Score</li>
+            <li>✔️ Resume Tips from AI</li>
+            <li>✔️ Download or Copy Letter</li>
+            <li>✔️ Instant Delivery</li>
+          </ul>
+          <button id="payNowBtn">Pay & Generate Again</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>
+        © 2025 TailorMyLetter. Built with AI ❤️
+      </p>
+    </footer>
+
+    <script>
+      const priceText = document.getElementById("priceValue");
+      const payBtn = document.getElementById("payNowBtn");
+
+      function detectRegionAndUpdatePrice() {
+        const region = Intl.DateTimeFormat().resolvedOptions().locale;
+        if (region.includes("IN")) {
+          priceText.textContent = "₹79 INR";
+        } else if (region.includes("CA")) {
+          priceText.textContent = "$2.49 CAD";
+        } else {
+          priceText.textContent = "$2.99 USD";
+        }
+      }
+
+      detectRegionAndUpdatePrice();
+
+      payBtn.addEventListener("click", () => {
+        window.location.href = "/checkout"; // Placeholder for Stripe checkout
+      });
+    </script>
+  </body>
+</html>

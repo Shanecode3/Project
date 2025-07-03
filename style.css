@@ -1,3 +1,19 @@
+:root {
+  --bg: #ffffff;
+  --text: #222222;
+  --accent: #0070f3;
+  --card: #f9f9f9;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  --bg: #0e0e0e;
+  --text: #f0f0f0;
+  --accent: #60a5fa;
+  --card: #1a1a1a;
+  --shadow: rgba(255, 255, 255, 0.05);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,10 +22,11 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #e9f1f7, #f4f7fa);
-  padding: 2rem;
-  color: #333;
+  background-color: var(--bg);
+  color: var(--text);
   line-height: 1.6;
+  padding: 2rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header {
@@ -19,21 +36,22 @@ header {
 
 header h1 {
   font-size: 2.2rem;
-  color: #0070f3;
+  color: var(--accent);
 }
 
 header p {
   font-size: 1.2rem;
-  color: #444;
+  color: var(--text);
 }
 
 main {
   max-width: 900px;
   margin: 0 auto;
-  background: #fff;
+  background: var(--card);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px var(--shadow);
+  position: relative;
 }
 
 .input-section label,
@@ -53,10 +71,17 @@ input[type="file"] {
   border-radius: 6px;
   resize: vertical;
   margin-bottom: 1rem;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+textarea::placeholder,
+input::placeholder {
+  color: #888;
 }
 
 button {
-  background-color: #0070f3;
+  background-color: var(--accent);
   color: #fff;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -72,6 +97,24 @@ button:hover {
   background-color: #0055c2;
 }
 
+.demo {
+  background-color: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+}
+
+.demo:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.loader {
+  text-align: center;
+  font-weight: bold;
+  padding: 1rem;
+  color: var(--accent);
+}
+
 .results-section {
   margin-top: 2rem;
   display: flex;
@@ -84,9 +127,9 @@ button:hover {
 }
 
 .ats-score {
-  background: #f9f9f9;
+  background: var(--card);
   border: 1px solid #ddd;
-  border-left: 5px solid #0070f3;
+  border-left: 5px solid var(--accent);
   padding: 1rem;
   border-radius: 6px;
 }
@@ -102,7 +145,7 @@ button:hover {
 .score-bar-fill {
   height: 100%;
   width: 0%;
-  background-color: #0070f3;
+  background-color: var(--accent);
   color: white;
   text-align: center;
   line-height: 20px;
@@ -117,9 +160,84 @@ footer {
   font-size: 0.9rem;
 }
 
-.loader {
-  text-align: center;
+/* Ensure theme toggle button text is always visible */
+body.dark #themeToggle {
+  color: #fff;
+  border-color: var(--accent);
+  background-color: var(--card);
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  body {
+    padding: 1rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  #themeToggle {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+.top-nav {
+  background-color: var(--bg);
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px var(--shadow);
+  margin-bottom: 1rem;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nav-logo {
+  font-size: 1.4rem;
   font-weight: bold;
-  padding: 1rem;
-  color: #0070f3;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nav-right a {
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.nav-right a:hover {
+  color: var(--accent);
+}
+
+.theme-btn {
+  background-color: var(--card);
+  border: 1px solid var(--accent);
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.theme-btn:hover {
+  background-color: var(--accent);
+  color: white;
 }

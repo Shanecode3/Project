@@ -1,56 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TailorMyLetter – AI Cover Letter Generator</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header>
-    <h1>TailorMyLetter</h1>
-    <p>Craft the perfect cover letter & get your resume ATS-ready — in seconds.</p>
-  </header>
-
-  <main>
-    <section class="input-section">
-      <label for="resumeFile">Upload Resume (PDF or Text):</label>
-      <input type="file" id="resumeFile" accept=".pdf,.txt" />
-      <label for="jobDescription">Job Description:</label>
-      <textarea id="jobDescription" placeholder="Paste the job description here..."></textarea>
-
-      <label for="tone">Select Tone:</label>
-      <select id="tone">
-        <option value="formal">Formal</option>
-        <option value="enthusiastic">Enthusiastic</option>
-        <option value="casual">Casual</option>
-      </select>
-
-      <button id="generateBtn">Generate Cover Letter & Score Resume</button>
-      <button onclick="fillDemo()" class="demo">Try Demo</button>
-    </section>
-
-    <section class="results-section" style="display: none;">
-      <div class="cover-letter">
-        <h2>Generated Cover Letter</h2>
-        <textarea id="coverLetterOutput" readonly></textarea>
-        <button onclick="copyCoverLetter()">Copy to Clipboard</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TailorMyLetter – AI Cover Letter Generator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">TailorMyLetter</a>
+        <div class="nav-right">
+          <a href="pricing.html">Pricing</a>
+          <a href="privacy.html">Privacy</a>
+          <select id="currencySelector">
+            <option value="INR">INR ₹</option>
+            <option value="CAD">CAD $</option>
+            <option value="USD">USD $</option>
+          </select>
+          <button id="themeToggle" class="theme-btn">🌙</button>
+        </div>
       </div>
+    </nav>
 
-      <div class="ats-score">
-        <h2>ATS Match Report</h2>
-        <p id="score">Score: --%</p>
-        <div class="score-bar"><div class="score-bar-fill"></div></div>
-        <ul id="atsFeedback"></ul>
-      </div>
-    </section>
-  </main>
+    <header>
+      <h1>TailorMyLetter</h1>
+      <p>
+        Craft the perfect cover letter & get your resume ATS-ready — in seconds.
+      </p>
+    </header>
 
-  <footer>
-    <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
-  </footer>
+    <main>
+      <section class="input-section">
+        <label for="resumeFile">Upload Resume (PDF or TXT):</label>
+        <input type="file" id="resumeFile" accept=".pdf,.txt" />
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
-  <script src="script.js"></script>
-</body>
+        <label for="jobDescription">Job Description:</label>
+        <textarea
+          id="jobDescription"
+          placeholder="Paste the job description here..."
+        ></textarea>
+
+        <label for="tone">Select Tone:</label>
+        <select id="tone">
+          <option value="formal">Formal</option>
+          <option value="enthusiastic">Enthusiastic</option>
+          <option value="casual">Casual</option>
+        </select>
+
+        <button id="generateBtn">Generate Cover Letter & Score Resume</button>
+        <button onclick="fillDemo()" class="demo">Try Demo</button>
+      </section>
+
+      <section class="results-section" style="display: none">
+        <div class="cover-letter">
+          <h2>Generated Cover Letter</h2>
+          <textarea id="coverLetterOutput" readonly></textarea>
+          <button onclick="copyCoverLetter()">Copy to Clipboard</button>
+        </div>
+
+        <div class="ats-score">
+          <h2>ATS Match Report</h2>
+          <p id="score">Score: --%</p>
+          <div class="score-bar"><div class="score-bar-fill"></div></div>
+          <ul id="atsFeedback"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        © 2025 TailorMyLetter. Built with AI ❤️ |
+        <a href="privacy.html">Privacy</a>
+      </p>
+      <p><a href="pricing.html">View Pricing</a></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="script.js"></script>
+  </body>
 </html>

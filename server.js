@@ -3,17 +3,49 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const axios = require("axios");
+const Stripe = require("stripe");
 
 dotenv.config();
 
 const app = express();
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "/")));
 
+const PRICES = {
+  INR: "price_1INRReplace",
+  USD: "price_1USDReplace",
+  CAD: "price_1CADReplace",
+};
+
+app.post("/create-checkout-session", async (req, res) => {
+  const { currency } = req.body;
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price: PRICES[currency] || PRICES.USD,
+          quantity: 1,
+        },
+      ],
+      success_url: "https://yourdomain.com/checkout.html",
+      cancel_url: "https://yourdomain.com",
+    });
+
+    res.json({ id: session.id });
+  } catch (err) {
+    console.error("❌ Stripe error:", err.message);
+    res.status(500).json({ error: "Failed to create checkout session." });
+  }
+});
+
 app.post("/generate", async (req, res) => {
   const { resume, jobDescription, tone } = req.body;
-
   const prompt = `
 You are an expert job assistant. Using the resume and job description below, do the following:
 
@@ -43,12 +75,10 @@ ${jobDescription}
         messages: [
           {
             role: "system",
-            content: "You are an expert job assistant. Only respond with clean JSON.",
+            content:
+              "You are an expert job assistant. Only respond with clean JSON.",
           },
-          {
-            role: "user",
-            content: prompt,
-          },
+          { role: "user", content: prompt },
         ],
       },
       {
@@ -56,41 +86,30 @@ ${jobDescription}
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     let raw = response.data.choices[0].message.content.trim();
-    console.log("🟢 Raw OpenRouter Response:", raw);
-
     if (raw.startsWith("```")) {
-      raw = raw.replace(/^```[a-z]*\n?/, "").replace(/```$/, "").trim();
+      raw = raw
+        .replace(/^```[a-z]*\n?/, "")
+        .replace(/```$/, "")
+        .trim();
     }
-
-    // Fix escaped newlines that break JSON parsing
-    raw = raw.replace(/\\n/g, '\\\\n');
-
     let json;
     try {
       json = JSON.parse(raw);
-    } catch (parseError) {
-      console.error("❌ JSON Parse Error:", parseError.message);
-      console.error("❌ Raw content:", raw);
-      return res.status(500).json({ error: "AI returned invalid JSON." });
+    } catch (err) {
+      return res.status(500).json({ error: "Invalid JSON returned from AI." });
     }
 
     res.json(json);
   } catch (err) {
-    if (err.response) {
-      console.error("❌ OpenRouter Error:", err.response.status);
-      console.error("Data:", JSON.stringify(err.response.data, null, 2));
-    } else {
-      console.error("❌ Server Error:", err.message);
-    }
-    res.status(500).json({ error: "Failed to get AI response." });
+    res.status(500).json({ error: "AI request failed." });
   }
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Server is running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
