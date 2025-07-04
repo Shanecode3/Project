@@ -14,7 +14,7 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
 
   if (alreadyUsedFree) {
     const currency = document.getElementById("currencySelector").value;
-    const res = await fetch("/create-checkout-session", {
+    const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ currency }),
@@ -44,7 +44,7 @@ function processFile(file, jobDescription, tone) {
 
   const processResumeAndGenerate = async (resume) => {
     try {
-      const response = await fetch("/generate", {
+      const response = await fetch("https://tailormyletter-backend.onrender.com/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resume, jobDescription, tone }),
