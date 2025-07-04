@@ -14,27 +14,33 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "/")));
 
-const PRICES = {
-  INR: "price_1INRReplace",
-  USD: "price_1USDReplace",
-  CAD: "price_1CADReplace",
+const LOOKUP_KEYS = {
+  INR: "premium_inr",
+  USD: "premium_usd",
+  CAD: "premium_cad",
 };
 
 app.post("/create-checkout-session", async (req, res) => {
   const { currency } = req.body;
+  const lookupKey = LOOKUP_KEYS[currency] || LOOKUP_KEYS.USD;
 
   try {
+    const prices = await stripe.prices.list({
+      lookup_keys: [lookupKey],
+      expand: ["data.product"],
+    });
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
       line_items: [
         {
-          price: PRICES[currency] || PRICES.USD,
+          price: prices.data[0].id,
           quantity: 1,
         },
       ],
-      success_url: "https://yourdomain.com/checkout.html",
-      cancel_url: "https://yourdomain.com",
+      success_url: "https://tailormyletter.vercel.app/checkout.html",
+      cancel_url: "https://tailormyletter.vercel.app",
     });
 
     res.json({ id: session.id });
