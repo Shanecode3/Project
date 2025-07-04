@@ -39,7 +39,7 @@ app.post("/create-checkout-session", async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: "https://tailormyletter.vercel.app/checkout.html",
+      success_url: "https://tailormyletter.vercel.app/pricing.html",
       cancel_url: "https://tailormyletter.vercel.app",
     });
 
