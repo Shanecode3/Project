@@ -10,9 +10,10 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
     return;
   }
 
+  window.isDemo = window.isDemo || false; // fallback if not set
   const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
 
-  if (alreadyUsedFree) {
+  if (alreadyUsedFree && !window.isDemo) {
     const currency = document.getElementById("currencySelector").value;
     const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
       method: "POST",
@@ -28,8 +29,11 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
     }
   }
 
-  // If free run available
-  localStorage.setItem("usedFree", "true");
+  if (!window.isDemo) {
+    localStorage.setItem("usedFree", "true");
+  }
+
+  window.isDemo = false; // reset to false for next use
   processFile(fileInput.files[0], jobDescription, tone);
 });
 
@@ -122,6 +126,8 @@ function processFile(file, jobDescription, tone) {
 }
 
 function fillDemo() {
+  window.isDemo = true;
+
   document.getElementById("jobDescription").value =
     `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
   const blob = new Blob(
