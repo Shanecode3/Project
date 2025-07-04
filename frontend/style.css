@@ -235,6 +235,7 @@ body.dark #themeToggle {
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  margin-bottom: 0rem
 }
 
 .theme-btn:hover {
