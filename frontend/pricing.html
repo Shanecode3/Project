@@ -5,6 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pricing – TailorMyLetter</title>
     <link rel="stylesheet" href="pricing.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Pricing</h1>
+      <p>Start with a free tailored cover letter. Pay only when you're ready.</p>
+      <a href="index.html" class="back">← Back to Home</a>
+    </header>
+
+    <main>
+      <div class="pricing-container">
+        <div class="plan free">
+          <h2>Free</h2>
+          <p class="price">$0</p>
+          <ul>
+            <li>✔️ 1 Full Cover Letter</li>
+            <li>✔️ Resume ATS Score</li>
+            <li>✔️ Personalized Tips</li>
+            <li>✔️ No Signup Needed</li>
+          </ul>
+          <p class="note">Use once per device</p>
+        </div>
+
+        <div class="plan paid">
+          <h2>Pay Per Use</h2>
+          <p class="price region-price" id="priceValue">$2.99 USD</p>
+          <ul>
+            <li>✔️ New Cover Letter & Score</li>
+            <li>✔️ Resume Tips from AI</li>
+            <li>✔️ Download or Copy Letter</li>
+            <li>✔️ Instant Delivery</li>
+          </ul>
+          <button id="payNowBtn">Pay & Generate Again</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
+    </footer>
+
+    <script>
+      const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
+      const priceText = document.getElementById("priceValue");
+      const payBtn = document.getElementById("payNowBtn");
+
+      function getCurrencyByLocale() {
+        const region = Intl.DateTimeFormat().resolvedOptions().locale;
+        if (region.includes("IN")) return "INR";
+        if (region.includes("CA")) return "CAD";
+        return "USD";
+      }
+
+      function updatePriceDisplay() {
+        const currency = getCurrencyByLocale();
+        if (currency === "INR") {
+          priceText.textContent = "₹79 INR";
+        } else if (currency === "CAD") {
+          priceText.textContent = "$2.49 CAD";
+        } else {
+          priceText.textContent = "$2.99 USD";
+        }
+      }
+
+      updatePriceDisplay();
+
+      payBtn.addEventListener("click", async () => {
+        const currency = getCurrencyByLocale();
+
+        try {
+          const response = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ currency }),
+          });
+
+          const session = await response.json();
+
+          if (session.id) {
+            stripe.redirectToCheckout({ sessionId: session.id });
+          } else {
+            alert("Payment failed. Try again.");
+          }
+        } catch (error) {
+          console.error("Error creating Stripe session:", error);
+          alert("Unable to initiate payment. Please try again.");
+        }
+      });
+    </script>
+  </body>
+</html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing – TailorMyLetter</title>
+    <link rel="stylesheet" href="pricing.css" />
   </head>
   <body>
     <header>
