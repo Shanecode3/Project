@@ -1,4 +1,4 @@
-const stripe = Stripe("pk_test_REPLACE_WITH_YOUR_PUBLIC_KEY");
+const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
 document.getElementById("generateBtn").addEventListener("click", async () => {
   const jobDescription = document.getElementById("jobDescription").value.trim();
