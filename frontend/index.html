@@ -77,5 +77,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="script.js"></script>
+    <script>
+        const currencySelector = document.getElementById("currencySelector");
+
+  // Load preferred currency or detect from region
+        function detectCurrency() {
+        const saved = localStorage.getItem("preferredCurrency");
+        if (saved) return saved;
+
+        const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+        if (locale.includes("IN")) return "INR";
+        if (locale.includes("CA")) return "CAD";
+        return "USD";
+        }
+
+        function setCurrency(currency) {
+        currencySelector.value = currency;
+        localStorage.setItem("preferredCurrency", currency);
+        }
+
+  // Initialize dropdown
+        const currency = detectCurrency();
+        setCurrency(currency);
+
+  // Update on change
+        currencySelector.addEventListener("change", () => {
+        setCurrency(currencySelector.value);
+        });        
+    </script>
   </body>
 </html>
