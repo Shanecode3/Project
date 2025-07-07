@@ -13,11 +13,6 @@
         <div class="nav-right">
           <a href="pricing.html">Pricing</a>
           <a href="privacy.html">Privacy</a>
-          <select id="currencySelector">
-            <option value="INR">CAD $</option>
-            <option value="CAD">INR ₹</option>
-            <option value="USD">USD $</option>
-          </select>
           <button id="themeToggle" class="theme-btn">🌙</button>
         </div>
       </div>
@@ -25,9 +20,7 @@
 
     <header>
       <h1>TailorMyLetter</h1>
-      <p>
-        Craft the perfect cover letter & get your resume ATS-ready — in seconds.
-      </p>
+      <p>Craft the perfect cover letter & get your resume ATS-ready — in seconds.</p>
     </header>
 
     <main>
@@ -36,10 +29,7 @@
         <input type="file" id="resumeFile" accept=".pdf,.txt" />
 
         <label for="jobDescription">Job Description:</label>
-        <textarea
-          id="jobDescription"
-          placeholder="Paste the job description here..."
-        ></textarea>
+        <textarea id="jobDescription" placeholder="Paste the job description here..."></textarea>
 
         <label for="tone">Select Tone:</label>
         <select id="tone">
@@ -69,41 +59,21 @@
     </main>
 
     <footer>
-      <p>
-        © 2025 TailorMyLetter. Built with AI ❤️
-      </p>
+      <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="script.js"></script>
     <script>
-        const currencySelector = document.getElementById("currencySelector");
+      // Dark mode init
+      const themeToggle = document.getElementById("themeToggle");
+      if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
 
-  // Load preferred currency or detect from region
-        function detectCurrency() {
-        const saved = localStorage.getItem("preferredCurrency");
-        if (saved) return saved;
-
-        const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-        if (locale.includes("IN")) return "INR";
-        if (locale.includes("CA")) return "CAD";
-        return "USD";
-        }
-
-        function setCurrency(currency) {
-        currencySelector.value = currency;
-        localStorage.setItem("preferredCurrency", currency);
-        }
-
-  // Initialize dropdown
-        const currency = detectCurrency();
-        setCurrency(currency);
-
-  // Update on change
-        currencySelector.addEventListener("change", () => {
-        setCurrency(currencySelector.value);
-        });        
+      themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+      });
     </script>
   </body>
 </html>
