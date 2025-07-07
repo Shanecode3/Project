@@ -30,7 +30,12 @@
 
         <div class="plan paid">
           <h2>Pay Per Use</h2>
-          <p class="price region-price" id="priceValue">$2.99 USD</p>
+          <p class="price">
+            <span id="highlightedPrice" style="font-weight: bold; font-size: 1.2em;"></span>
+          </p>
+          <p style="font-size: 0.95em; color: #555;">
+            Or <span>₹79 INR</span> / <span>$2.49 CAD</span> / <span>$2.99 USD</span>
+          </p>
           <ul>
             <li>✔️ New Cover Letter & Score</li>
             <li>✔️ Resume Tips from AI</li>
@@ -48,8 +53,8 @@
 
     <script>
       const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
-      const priceText = document.getElementById("priceValue");
       const payBtn = document.getElementById("payNowBtn");
+      const highlightedPrice = document.getElementById("highlightedPrice");
 
       function getCurrencyByLocale() {
         const region = Intl.DateTimeFormat().resolvedOptions().locale;
@@ -58,18 +63,20 @@
         return "USD";
       }
 
-      function updatePriceDisplay() {
+      function updateHighlightedPrice() {
         const currency = getCurrencyByLocale();
+        let display = "$2.99 USD"; // default
+
         if (currency === "INR") {
-          priceText.textContent = "₹79 INR";
+          display = "₹79 INR";
         } else if (currency === "CAD") {
-          priceText.textContent = "$2.49 CAD";
-        } else {
-          priceText.textContent = "$2.99 USD";
+          display = "$2.49 CAD";
         }
+
+        highlightedPrice.textContent = display + " (Your Region)";
       }
 
-      updatePriceDisplay();
+      updateHighlightedPrice();
 
       payBtn.addEventListener("click", async () => {
         const currency = getCurrencyByLocale();
