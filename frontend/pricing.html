@@ -1,3 +1,4 @@
+<!-- Rename this file as pricing.html when saving -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -8,10 +9,20 @@
     <script src="https://js.stripe.com/v3/"></script>
   </head>
   <body>
+    <nav class="top-nav">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">TailorMyLetter</a>
+        <div class="nav-right">
+          <a href="pricing.html">Pricing</a>
+          <a href="privacy.html">Privacy</a>
+          <button id="themeToggle" class="theme-btn">🌙</button>
+        </div>
+      </div>
+    </nav>
+
     <header>
       <h1>Pricing</h1>
       <p>Start with a free tailored cover letter. Pay only when you're ready.</p>
-      <a href="index.html" class="back">← Back to Home</a>
     </header>
 
     <main>
@@ -33,13 +44,10 @@
           <p class="price">
             <span id="highlightedPrice" style="font-weight: bold; font-size: 1.2em;"></span>
           </p>
-          <p style="font-size: 0.95em; color: #555;">
-            Or ₹79 INR / $2.49 CAD / $2.99 USD
-          </p>
+          <p style="font-size: 0.95em; color: #555;">Or ₹79 INR / $2.49 CAD / $2.99 USD</p>
 
-          <!-- Currency Dropdown -->
-          <label for="currencySelector" style="font-weight: 500; margin-top: 12px;">Choose Currency:</label>
-          <select id="currencySelector" style="margin: 8px 0; padding: 6px;">
+          <label for="currencySelector" style="font-weight: 500;">Choose Currency:</label>
+          <select id="currencySelector">
             <option value="INR">₹79 INR (India)</option>
             <option value="CAD">$2.49 CAD (Canada)</option>
             <option value="USD">$2.99 USD (International)</option>
@@ -72,11 +80,10 @@
         USD: "$2.99 USD"
       };
 
-      // Detect currency from browser
+      // Detect preferred currency or fallback
       function detectCurrency() {
         const saved = localStorage.getItem("preferredCurrency");
         if (saved && prices[saved]) return saved;
-
         const locale = Intl.DateTimeFormat().resolvedOptions().locale;
         if (locale.includes("IN")) return "INR";
         if (locale.includes("CA")) return "CAD";
@@ -88,7 +95,6 @@
         currencySelector.value = currency;
       }
 
-      // Initialize on load
       const initialCurrency = detectCurrency();
       updateDisplayedPrice(initialCurrency);
 
@@ -115,10 +121,18 @@
           } else {
             alert("Payment failed. Try again.");
           }
-        } catch (error) {
-          console.error("Error initiating payment:", error);
+        } catch (err) {
+          console.error("Error initiating Stripe checkout:", err);
           alert("Could not start payment. Try again.");
         }
+      });
+
+      // Dark mode sync
+      const themeToggle = document.getElementById("themeToggle");
+      if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
+      themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
       });
     </script>
   </body>
