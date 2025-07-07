@@ -1,5 +1,53 @@
 const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
+// Populate currency dropdown if exists
+const currencySelector = document.getElementById("currencySelector");
+const supportedCurrencies = {
+  INR: "₹79 INR",
+  CAD: "$2.49 CAD",
+  USD: "$2.99 USD"
+};
+
+function getCurrencyFromLocale() {
+  const region = Intl.DateTimeFormat().resolvedOptions().locale;
+  if (region.includes("IN")) return "INR";
+  if (region.includes("CA")) return "CAD";
+  return "USD";
+}
+
+function getCurrency() {
+  return localStorage.getItem("currency") || getCurrencyFromLocale();
+}
+
+function setCurrency(value) {
+  localStorage.setItem("currency", value);
+  updatePriceDisplay(value);
+}
+
+// Set initial currency
+if (!localStorage.getItem("currency")) {
+  setCurrency(getCurrencyFromLocale());
+}
+
+// Update dropdown if exists
+if (currencySelector) {
+  const current = getCurrency();
+  currencySelector.innerHTML = Object.keys(supportedCurrencies)
+    .map(code => `<option value="${code}" ${code === current ? "selected" : ""}>${supportedCurrencies[code]}</option>`)
+    .join("");
+
+  currencySelector.addEventListener("change", () => {
+    setCurrency(currencySelector.value);
+  });
+}
+
+// Optional price display update (if any element with id="priceDisplay" exists)
+function updatePriceDisplay(currency) {
+  const el = document.getElementById("priceDisplay");
+  if (el) el.textContent = supportedCurrencies[currency] || supportedCurrencies.USD;
+}
+
+// Handle Generate button logic
 document.getElementById("generateBtn").addEventListener("click", async () => {
   const jobDescription = document.getElementById("jobDescription").value.trim();
   const tone = document.getElementById("tone").value;
@@ -10,16 +58,16 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
     return;
   }
 
-  window.isDemo = window.isDemo || false; // fallback if not set
   const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
 
-  if (alreadyUsedFree && !window.isDemo) {
-    const currency = document.getElementById("currencySelector").value;
+  if (alreadyUsedFree) {
+    const currency = getCurrency();
     const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ currency }),
     });
+
     const session = await res.json();
     if (session.id) {
       return stripe.redirectToCheckout({ sessionId: session.id });
@@ -29,14 +77,12 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
     }
   }
 
-  if (!window.isDemo) {
-    localStorage.setItem("usedFree", "true");
-  }
-
-  window.isDemo = false; // reset to false for next use
+  // If free run available
+  localStorage.setItem("usedFree", "true");
   processFile(fileInput.files[0], jobDescription, tone);
 });
 
+// File processing and resume generation
 function processFile(file, jobDescription, tone) {
   const button = document.getElementById("generateBtn");
   button.disabled = true;
@@ -126,15 +172,11 @@ function processFile(file, jobDescription, tone) {
 }
 
 function fillDemo() {
-  window.isDemo = true;
-
   document.getElementById("jobDescription").value =
     `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
   const blob = new Blob(
     [`John Doe is a developer skilled in React, Node.js, MongoDB, REST APIs.`],
-    {
-      type: "text/plain",
-    },
+    { type: "text/plain" }
   );
   const file = new File([blob], "resume.txt", { type: "text/plain" });
   const dt = new DataTransfer();
