@@ -153,3 +153,18 @@ window.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("dark");
   }
 });
+// Make sure demo button works
+document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
+
+// Ensure all buttons work only after DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark");
+  }
+
+  // Add event listeners here after DOM is loaded
+  document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
+  document.getElementById("generateBtn")?.addEventListener("click", async () => {
+    // ... keep your existing generateBtn code logic here ...
+  });
+});
