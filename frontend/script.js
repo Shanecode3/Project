@@ -1,41 +1,47 @@
-const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
+// Stripe instance
+const stripe = Stripe("pk_live_...your_live_key_here...");
 
-document.getElementById("generateBtn")?.addEventListener("click", async () => {
-  const jobDescription = document.getElementById("jobDescription").value.trim();
-  const tone = document.getElementById("tone").value;
-  const fileInput = document.getElementById("resumeFile");
+// Detect currency
+function getCurrency() {
+  const region = Intl.DateTimeFormat().resolvedOptions().locale;
+  if (region.includes("IN")) return "INR";
+  if (region.includes("CA")) return "CAD";
+  return "USD";
+}
 
-  if (!fileInput.files.length || !jobDescription) {
-    alert("Please upload a resume file and paste the job description.");
-    return;
-  }
+// Theme Toggle
+function applyTheme() {
+  const isDark = localStorage.getItem("darkMode") === "true";
+  document.body.classList.toggle("dark", isDark);
+  const btn = document.getElementById("themeToggle");
+  if (btn) btn.textContent = isDark ? "🌞 Theme" : "🌙 Theme";
+}
 
-  const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
+function toggleTheme() {
+  const darkNow = !document.body.classList.contains("dark");
+  localStorage.setItem("darkMode", darkNow);
+  applyTheme();
+}
 
-  if (alreadyUsedFree) {
-    const currency = getCurrency();
-    const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ currency }),
-    });
-    const session = await res.json();
-    if (session.id) {
-      return stripe.redirectToCheckout({ sessionId: session.id });
-    } else {
-      alert("Payment failed. Try again.");
-      return;
-    }
-  }
-
-  localStorage.setItem("usedFree", "true");
-  processFile(fileInput.files[0], jobDescription, tone);
-});
+function fillDemo() {
+  document.getElementById("jobDescription").value =
+    `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
+  const blob = new Blob(
+    [`John Doe is a developer skilled in React, Node.js, MongoDB, REST APIs.`],
+    { type: "text/plain" }
+  );
+  const file = new File([blob], "resume.txt", { type: "text/plain" });
+  const dt = new DataTransfer();
+  dt.items.add(file);
+  document.getElementById("resumeFile").files = dt.files;
+  document.getElementById("tone").value = "enthusiastic";
+}
 
 function processFile(file, jobDescription, tone) {
   const button = document.getElementById("generateBtn");
   button.disabled = true;
   button.textContent = "Generating...";
+
   const loader = document.createElement("div");
   loader.className = "loader";
   loader.textContent = "Talking to AI...";
@@ -62,8 +68,6 @@ function processFile(file, jobDescription, tone) {
         data.coverLetter || "No letter generated.";
 
       const score = data.score || 0;
-      document.getElementById("score").textContent = `Score: ${score}%`;
-
       const bar = document.querySelector(".score-bar-fill");
       bar.style.width = `${score}%`;
       bar.textContent = `${score}%`;
@@ -89,6 +93,7 @@ function processFile(file, jobDescription, tone) {
     const pdfjsLib = window["pdfjs-dist/build/pdf"];
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
+
     const reader = new FileReader();
     reader.onload = function () {
       const typedarray = new Uint8Array(reader.result);
@@ -101,8 +106,7 @@ function processFile(file, jobDescription, tone) {
           }
           pdf.getPage(i).then((page) => {
             page.getTextContent().then((text) => {
-              textContent +=
-                text.items.map((item) => item.str).join(" ") + "\n";
+              textContent += text.items.map((item) => item.str).join(" ") + "\n";
               loadPage(i + 1);
             });
           });
@@ -120,51 +124,43 @@ function processFile(file, jobDescription, tone) {
   }
 }
 
-function fillDemo() {
-  document.getElementById("jobDescription").value =
-    `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
-  const blob = new Blob(
-    [`John Doe is a developer skilled in React, Node.js, MongoDB, REST APIs.`],
-    { type: "text/plain" }
-  );
-  const file = new File([blob], "resume.txt", { type: "text/plain" });
-  const dt = new DataTransfer();
-  dt.items.add(file);
-  document.getElementById("resumeFile").files = dt.files;
-  document.getElementById("tone").value = "enthusiastic";
-}
+function handleGenerateClick() {
+  const jobDescription = document.getElementById("jobDescription").value.trim();
+  const tone = document.getElementById("tone").value;
+  const fileInput = document.getElementById("resumeFile");
 
-function getCurrency() {
-  const region = Intl.DateTimeFormat().resolvedOptions().locale;
-  if (region.includes("IN")) return "INR";
-  if (region.includes("CA")) return "CAD";
-  return "USD";
-}
-
-document.getElementById("themeToggle")?.addEventListener("click", () => {
-  const body = document.body;
-  body.classList.toggle("dark");
-  localStorage.setItem("darkMode", body.classList.contains("dark"));
-});
-
-// Restore dark mode on page load
-window.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("darkMode") === "true") {
-    document.body.classList.add("dark");
+  if (!fileInput.files.length || !jobDescription) {
+    alert("Please upload a resume file and paste the job description.");
+    return;
   }
-});
-// Make sure demo button works
-document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
 
-// Ensure all buttons work only after DOM is ready
+  const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
+
+  if (alreadyUsedFree) {
+    const currency = getCurrency();
+    fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currency }),
+    })
+      .then(res => res.json())
+      .then(session => {
+        if (session.id) {
+          stripe.redirectToCheckout({ sessionId: session.id });
+        } else {
+          alert("Payment failed. Try again.");
+        }
+      });
+    return;
+  }
+
+  localStorage.setItem("usedFree", "true");
+  processFile(fileInput.files[0], jobDescription, tone);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("darkMode") === "true") {
-    document.body.classList.add("dark");
-  }
-
-  // Add event listeners here after DOM is loaded
+  applyTheme();
+  document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
   document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
-  document.getElementById("generateBtn")?.addEventListener("click", async () => {
-    // ... keep your existing generateBtn code logic here ...
-  });
+  document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
 });
