@@ -3,74 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TailorMyLetter – AI Cover Letter Generator</title>
+  <title>TailorMyLetter – Generate Cover Letter</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="top-nav">
-    <div class="nav-container">
-      <a href="index.html" class="nav-logo">TailorMyLetter</a>
-      <div class="nav-right">
-        <a href="pricing.html">Pricing</a>
-        <a href="privacy.html">Privacy</a>
-        <button id="themeToggle" class="theme-btn">🌙 Theme</button>
-      </div>
+  <nav class="top-nav">
+    <a href="index.html" class="brand">TailorMyLetter</a>
+    <div class="nav-links">
+      <a href="pricing.html">Pricing</a>
+      <a href="privacy.html">Privacy</a>
+      <button id="themeToggle">🌙 Theme</button>
     </div>
-  </div>
+  </nav>
 
-  <main>
-    <header>
-      <h1>Generate Your Perfect Cover Letter</h1>
-      <p>Upload your resume and paste the job description. Let AI craft the letter!</p>
-    </header>
+  <main class="form-container">
+    <h1>Generate Your Perfect Cover Letter</h1>
+    <p>Upload your resume and paste the job description. Let AI craft the letter!</p>
 
-    <div class="input-section">
-      <label for="resumeFile">Upload Resume (PDF or TXT)</label>
-      <input type="file" id="resumeFile" accept=".pdf,.txt" />
+    <form id="letterForm">
+      <label for="resume">Upload Resume (PDF or TXT)</label>
+      <input type="file" id="resume" accept=".pdf,.txt" />
 
       <label for="jobDescription">Paste Job Description</label>
-      <textarea id="jobDescription" rows="5" placeholder="Enter the job description..."></textarea>
+      <textarea id="jobDescription" placeholder="Enter the job description..."></textarea>
 
       <label for="tone">Preferred Tone</label>
       <select id="tone">
-        <option value="enthusiastic">Enthusiastic</option>
-        <option value="formal">Formal</option>
-        <option value="friendly">Friendly</option>
+        <option value="Enthusiastic">Enthusiastic</option>
+        <option value="Professional">Professional</option>
+        <option value="Confident">Confident</option>
+        <option value="Creative">Creative</option>
       </select>
 
-      <button id="generateBtn">Generate Cover Letter & Score Resume</button>
-      <button class="demo" onclick="fillDemo()">Use Demo</button>
-    </div>
-
-    <div class="results-section" style="display: none;">
-      <div class="cover-letter">
-        <h2>Generated Cover Letter</h2>
-        <textarea id="coverLetterOutput" readonly></textarea>
+      <div class="btn-group">
+        <button type="submit" id="generateBtn">Generate Cover Letter & Score Resume</button>
+        <button type="button" id="demoBtn">Use Demo</button>
       </div>
+    </form>
 
-      <div class="ats-score">
-        <h2>ATS Match Score</h2>
-        <p id="score">Score: 0%</p>
-        <div class="score-bar"><div class="score-bar-fill"></div></div>
-        <ul id="atsFeedback"></ul>
-      </div>
-    </div>
+    <div id="outputArea" class="output-box"></div>
   </main>
 
-  <footer>© 2025 TailorMyLetter. Built with AI ❤️</footer>
+  <footer>
+    <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
+  </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
   <script src="script.js"></script>
-  <script>
-    // Persist Dark Mode
-    const themeBtn = document.getElementById("themeToggle");
-    const currentTheme = localStorage.getItem("theme");
-    if (currentTheme === "dark") document.body.classList.add("dark");
-
-    themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-    });
-  </script>
 </body>
 </html>
