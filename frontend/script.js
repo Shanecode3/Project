@@ -1,3 +1,9 @@
+document.addEventListener("DOMContentLoaded", () => {
+  applyTheme();
+  document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
+  document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
+  document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
+});
 // Stripe instance
 const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
@@ -158,9 +164,3 @@ function handleGenerateClick() {
   processFile(fileInput.files[0], jobDescription, tone);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  applyTheme();
-  document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
-  document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
-  document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
-});
