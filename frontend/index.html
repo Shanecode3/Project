@@ -1,79 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TailorMyLetter – AI Cover Letter Generator</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <nav class="top-nav">
-      <div class="nav-container">
-        <a href="index.html" class="nav-logo">TailorMyLetter</a>
-        <div class="nav-right">
-          <a href="pricing.html">Pricing</a>
-          <a href="privacy.html">Privacy</a>
-          <button id="themeToggle" class="theme-btn">🌙</button>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TailorMyLetter – AI Cover Letter Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="top-nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">TailorMyLetter</a>
+      <div class="nav-right">
+        <a href="pricing.html">Pricing</a>
+        <a href="privacy.html">Privacy</a>
+        <button id="themeToggle" class="theme-btn">🌙 Theme</button>
       </div>
-    </nav>
+    </div>
+  </div>
 
+  <main>
     <header>
-      <h1>TailorMyLetter</h1>
-      <p>Craft the perfect cover letter & get your resume ATS-ready — in seconds.</p>
+      <h1>Generate Your Perfect Cover Letter</h1>
+      <p>Upload your resume and paste the job description. Let AI craft the letter!</p>
     </header>
 
-    <main>
-      <section class="input-section">
-        <label for="resumeFile">Upload Resume (PDF or TXT):</label>
-        <input type="file" id="resumeFile" accept=".pdf,.txt" />
+    <div class="input-section">
+      <label for="resumeFile">Upload Resume (PDF or TXT)</label>
+      <input type="file" id="resumeFile" accept=".pdf,.txt" />
 
-        <label for="jobDescription">Job Description:</label>
-        <textarea id="jobDescription" placeholder="Paste the job description here..."></textarea>
+      <label for="jobDescription">Paste Job Description</label>
+      <textarea id="jobDescription" rows="5" placeholder="Enter the job description..."></textarea>
 
-        <label for="tone">Select Tone:</label>
-        <select id="tone">
-          <option value="formal">Formal</option>
-          <option value="enthusiastic">Enthusiastic</option>
-          <option value="casual">Casual</option>
-        </select>
+      <label for="tone">Preferred Tone</label>
+      <select id="tone">
+        <option value="enthusiastic">Enthusiastic</option>
+        <option value="formal">Formal</option>
+        <option value="friendly">Friendly</option>
+      </select>
 
-        <button id="generateBtn">Generate Cover Letter & Score Resume</button>
-        <button onclick="fillDemo()" class="demo">Try Demo</button>
-      </section>
+      <button id="generateBtn">Generate Cover Letter & Score Resume</button>
+      <button class="demo" onclick="fillDemo()">Use Demo</button>
+    </div>
 
-      <section class="results-section" style="display: none">
-        <div class="cover-letter">
-          <h2>Generated Cover Letter</h2>
-          <textarea id="coverLetterOutput" readonly></textarea>
-          <button onclick="copyCoverLetter()">Copy to Clipboard</button>
-        </div>
+    <div class="results-section" style="display: none;">
+      <div class="cover-letter">
+        <h2>Generated Cover Letter</h2>
+        <textarea id="coverLetterOutput" readonly></textarea>
+      </div>
 
-        <div class="ats-score">
-          <h2>ATS Match Report</h2>
-          <p id="score">Score: --%</p>
-          <div class="score-bar"><div class="score-bar-fill"></div></div>
-          <ul id="atsFeedback"></ul>
-        </div>
-      </section>
-    </main>
+      <div class="ats-score">
+        <h2>ATS Match Score</h2>
+        <p id="score">Score: 0%</p>
+        <div class="score-bar"><div class="score-bar-fill"></div></div>
+        <ul id="atsFeedback"></ul>
+      </div>
+    </div>
+  </main>
 
-    <footer>
-      <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
-    </footer>
+  <footer>© 2025 TailorMyLetter. Built with AI ❤️</footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="script.js"></script>
-    <script>
-      // Dark mode init
-      const themeToggle = document.getElementById("themeToggle");
-      if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Persist Dark Mode
+    const themeBtn = document.getElementById("themeToggle");
+    const currentTheme = localStorage.getItem("theme");
+    if (currentTheme === "dark") document.body.classList.add("dark");
 
-      themeToggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark");
-        localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-      });
-    </script>
-  </body>
+    themeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    });
+  </script>
+</body>
 </html>
