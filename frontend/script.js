@@ -1,5 +1,5 @@
 // Stripe instance
-const stripe = Stripe("pk_live_...your_live_key_here...");
+const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
 // Detect currency
 function getCurrency() {
