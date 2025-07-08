@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TailorMyLetter – Generate Cover Letter</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
 </head>
 <body>
   <nav class="top-nav">
@@ -34,7 +35,7 @@
 
     <div class="button-group">
       <button id="generateBtn">Generate Cover Letter & Score Resume</button>
-      <button id="demoBtn" onclick="fillDemo()">Use Demo</button>
+      <button id="demoBtn">Use Demo</button>
     </div>
 
     <div class="results-section" style="display: none;">
@@ -55,7 +56,6 @@
     <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
   <script src="script.js"></script>
   <script>
     const themeToggle = document.getElementById("themeToggle");
