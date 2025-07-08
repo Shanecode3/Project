@@ -7,32 +7,43 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <nav class="top-nav">
-      <a href="index.html" class="brand">TailorMyLetter</a>
-      <div class="nav-links">
-        <a href="pricing.html">Pricing</a>
-        <a href="privacy.html">Privacy</a>
-        <button id="themeToggle">🌙 Theme</button>
-      </div>
-    </nav>
+  <nav class="top-nav">
+    <a href="index.html" class="brand">TailorMyLetter</a>
+    <div class="nav-links">
+      <a href="pricing.html">Pricing</a>
+      <a href="privacy.html">Privacy</a>
+      <button id="themeToggle">🌙 Theme</button>
+    </div>
+  </nav>
 
-
-  <main class="privacy-section">
+  <main class="content-container">
     <h1>Privacy Policy</h1>
-    <p>Your privacy matters. TailorMyLetter does not store or share your personal resume or job description data. All files are processed securely and temporarily for the generation task only.</p>
+    <p>Your privacy matters. We do not collect any personal data or store your resume/job description on our servers.</p>
 
-    <h2>What We Collect</h2>
-    <ul>
-      <li>No user accounts or login required</li>
-      <li>We do not store resumes or job descriptions</li>
-      <li>Only anonymous usage data for improving the service</li>
-    </ul>
+    <section>
+      <h2>1. Information We Collect</h2>
+      <p>We do not store your resume, job description, or AI responses. All processing is done temporarily to provide you results, and then discarded.</p>
+    </section>
 
-    <h2>Third-party Services</h2>
-    <p>We use Stripe for secure payments and OpenRouter for AI-powered cover letter generation. These services handle data according to their own privacy policies.</p>
+    <section>
+      <h2>2. Use of Stripe</h2>
+      <p>We use Stripe to securely process payments. Stripe may collect limited information for transaction processing. Please refer to <a href="https://stripe.com/privacy" target="_blank">Stripe’s Privacy Policy</a> for more details.</p>
+    </section>
 
-    <h2>Your Rights</h2>
-    <p>You may clear your local usage history (one free usage) by clearing your browser’s local storage settings.</p>
+    <section>
+      <h2>3. Local Storage</h2>
+      <p>We use your browser’s localStorage to track your free usage. This data is not sent to our servers.</p>
+    </section>
+
+    <section>
+      <h2>4. Third-party Services</h2>
+      <p>We use OpenRouter API for AI-generated responses. Inputs are processed solely for the generation task and not stored by us.</p>
+    </section>
+
+    <section>
+      <h2>5. Contact</h2>
+      <p>If you have questions or concerns about this policy, contact us at: <strong>support@tailormyletter.com</strong></p>
+    </section>
   </main>
 
   <footer>
@@ -41,17 +52,20 @@
 
   <script>
     const themeToggle = document.getElementById("themeToggle");
+
     function applyTheme() {
       const mode = localStorage.getItem("theme") || "light";
       document.body.classList.toggle("dark", mode === "dark");
       themeToggle.textContent = mode === "dark" ? "🌞 Theme" : "🌙 Theme";
     }
+
     themeToggle.addEventListener("click", () => {
       const current = document.body.classList.contains("dark") ? "dark" : "light";
       const next = current === "dark" ? "light" : "dark";
       localStorage.setItem("theme", next);
       applyTheme();
     });
+
     applyTheme();
   </script>
 </body>
