@@ -58,20 +58,41 @@
     <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
-    const themeToggle = document.getElementById("themeToggle");
-    function applyTheme() {
-      const mode = localStorage.getItem("theme") || "light";
-      document.body.classList.toggle("dark", mode === "dark");
-      themeToggle.textContent = mode === "dark" ? "🌞 Theme" : "🌙 Theme";
+    const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
+
+    const payBtn = document.getElementById("payNowBtn");
+
+    function getCurrencyByLocale() {
+      const region = Intl.DateTimeFormat().resolvedOptions().locale;
+      if (region.includes("IN")) return "INR";
+      if (region.includes("CA")) return "CAD";
+      return "USD";
     }
-    themeToggle.addEventListener("click", () => {
-      const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
-      localStorage.setItem("theme", newTheme);
-      applyTheme();
+
+    payBtn.addEventListener("click", async () => {
+      const currency = getCurrencyByLocale();
+
+      try {
+        const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ currency }),
+        });
+
+        const session = await res.json();
+
+        if (session.id) {
+          await stripe.redirectToCheckout({ sessionId: session.id });
+        } else {
+          alert("Payment failed. No session ID.");
+        }
+      } catch (err) {
+        console.error("Stripe checkout error:", err);
+        alert("Checkout failed. Try again later.");
+      }
     });
-    applyTheme();
   </script>
 </body>
 </html>
