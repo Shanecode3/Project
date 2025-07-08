@@ -49,53 +49,135 @@ body {
 
 .top-nav .brand {
   font-size: 1.4rem;
-  font-weight: bold;
+  font-weight: 600;
   color: var(--accent);
-  text-decoration: none;
 }
 
-.nav-links {
+.top-nav .nav-links {
   display: flex;
-  gap: 1.2rem;
   align-items: center;
 }
 
-.nav-links a {
-  color: var(--text);
+.top-nav .nav-links a {
+  margin-left: 1.5rem;
   text-decoration: none;
+  color: var(--text);
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.nav-links a:hover {
+.top-nav .nav-links a:hover {
   color: var(--accent);
 }
 
 #themeToggle {
   background: none;
-  border: 2px solid var(--accent);
-  padding: 0.4rem 0.75rem;
-  color: var(--accent);
-  border-radius: 8px;
-  font-size: 1rem;
+  border: none;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: background 0.3s, color 0.3s;
+  margin-left: 1rem;
+  color: var(--text);
 }
 
-#themeToggle:hover {
-  background: var(--accent);
-  color: white;
+/* Header & Footer */
+header,
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
 }
 
-/* Section Layout */
+footer {
+  font-size: 0.9rem;
+  margin-top: 2rem;
+  color: #888;
+}
+
+/* Sections */
 main {
+  padding: 2rem;
   max-width: 960px;
   margin: auto;
-  padding: 2rem;
-  background: var(--card);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px var(--shadow);
-  animation: fadeIn 0.5s ease;
+}
+
+/* Buttons */
+button,
+.btn {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover,
+.btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Forms */
+textarea,
+select,
+input[type="file"] {
+  width: 100%;
+  padding: 0.7rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-family: 'Inter', sans-serif;
+}
+
+body.dark textarea,
+body.dark select,
+body.dark input[type="file"] {
+  background: #1e1e1e;
+  color: #eee;
+  border: 1px solid #444;
+}
+
+/* ATS Score Bar */
+.score-bar {
+  height: 20px;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.score-bar-fill {
+  height: 100%;
+  width: 0;
+  background: #28a745;
+  text-align: center;
+  color: #fff;
+  line-height: 20px;
+  font-weight: 600;
+  transition: width 0.5s ease;
+}
+
+/* Results Section */
+.results-section {
+  margin-top: 2rem;
+  display: none;
+}
+
+ul#atsFeedback {
+  margin-top: 1rem;
+  padding-left: 1rem;
+}
+
+ul#atsFeedback li {
+  margin-bottom: 0.5rem;
 }
 
 /* Animations */
@@ -105,82 +187,7 @@ main {
   100% { background-position: 0% 50%; }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #888;
-  padding: 2rem 1rem;
-  margin-top: 3rem;
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .top-nav {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .nav-links {
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
-}
-.form-container {
-  max-width: 720px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.form-container h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.form-container label {
-  display: block;
-  margin-top: 1rem;
-  font-weight: 600;
-}
-
-.form-container input[type="file"],
-.form-container textarea,
-.form-container select {
-  width: 100%;
-  padding: 0.6rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-top: 0.4rem;
-}
-
-.button-group {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.button-group button {
-  flex: 1;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.button-group button:hover {
-  background-color: #0056b3;
+@keyframes fadeInSlide {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
