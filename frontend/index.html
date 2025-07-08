@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pricing – TailorMyLetter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TailorMyLetter – Generate Cover Letter</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
 </head>
 <body>
   <nav class="top-nav">
@@ -17,40 +17,38 @@
     </div>
   </nav>
 
-  <header>
-    <h1>Pricing</h1>
-    <p>Start with a free tailored cover letter. Pay only when you're ready.</p>
-  </header>
+  <main class="form-section">
+    <h2>Generate Your Perfect Cover Letter</h2>
 
-  <main class="pricing-container">
-    <div class="plan free">
-      <h2>Free</h2>
-      <p class="price">$0</p>
-      <ul>
-        <li>✔️ 1 Full Cover Letter</li>
-        <li>✔️ Resume ATS Score</li>
-        <li>✔️ Personalized Tips</li>
-        <li>✔️ No Signup Needed</li>
-      </ul>
-      <p class="note">Use once per device</p>
+    <label for="resumeFile">Upload Resume (PDF or TXT)</label>
+    <input type="file" id="resumeFile" />
+
+    <label for="jobDescription">Paste Job Description</label>
+    <textarea id="jobDescription" rows="4" placeholder="Enter the job description..."></textarea>
+
+    <label for="tone">Preferred Tone</label>
+    <select id="tone">
+      <option value="enthusiastic">Enthusiastic</option>
+      <option value="professional">Professional</option>
+      <option value="friendly">Friendly</option>
+    </select>
+
+    <div class="button-group">
+      <button id="generateBtn">Generate Cover Letter & Score Resume</button>
+      <button id="demoBtn">Use Demo</button>
     </div>
 
-    <div class="plan paid">
-      <h2>Pay Per Use</h2>
-      <p class="price"><span id="priceDisplay"></span></p>
-      <label for="currencySelector">Select Currency:</label>
-      <select id="currencySelector">
-        <option value="USD">$2.99 USD</option>
-        <option value="CAD">$2.49 CAD</option>
-        <option value="INR">₹79 INR</option>
-      </select>
-      <ul>
-        <li>✔️ New Cover Letter & Score</li>
-        <li>✔️ Resume Tips from AI</li>
-        <li>✔️ Download or Copy Letter</li>
-        <li>✔️ Instant Delivery</li>
-      </ul>
-      <button id="payNowBtn">Pay & Generate Again</button>
+    <div class="results-section" style="display: none;">
+      <h3>AI-Generated Cover Letter</h3>
+      <textarea id="coverLetterOutput" readonly></textarea>
+
+      <h4>ATS Match Score</h4>
+      <div class="score-bar">
+        <div class="score-bar-fill">0%</div>
+      </div>
+
+      <h4>AI Feedback</h4>
+      <ul id="atsFeedback"></ul>
     </div>
   </main>
 
