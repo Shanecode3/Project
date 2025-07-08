@@ -17,31 +17,26 @@
   </nav>
 
   <main class="form-container">
-    <h1>Generate Your Perfect Cover Letter</h1>
-    <p>Upload your resume and paste the job description. Let AI craft the letter!</p>
-
-    <form id="letterForm">
-      <label for="resume">Upload Resume (PDF or TXT)</label>
-      <input type="file" id="resume" accept=".pdf,.txt" />
+    <div class="form-container">
+      <h2>Generate Your Perfect Cover Letter</h2>
+      <label for="resumeUpload">Upload Resume (PDF or TXT)</label>
+      <input type="file" id="resumeUpload" />
 
       <label for="jobDescription">Paste Job Description</label>
-      <textarea id="jobDescription" placeholder="Enter the job description..."></textarea>
+      <textarea id="jobDescription" rows="4" placeholder="Enter the job description..."></textarea>
 
-      <label for="tone">Preferred Tone</label>
-      <select id="tone">
-        <option value="Enthusiastic">Enthusiastic</option>
-        <option value="Professional">Professional</option>
-        <option value="Confident">Confident</option>
-        <option value="Creative">Creative</option>
+      <label for="toneSelect">Preferred Tone</label>
+      <select id="toneSelect">
+        <option>Enthusiastic</option>
+        <option>Professional</option>
+        <option>Friendly</option>
       </select>
 
-      <div class="btn-group">
-        <button type="submit" id="generateBtn">Generate Cover Letter & Score Resume</button>
-        <button type="button" id="demoBtn">Use Demo</button>
-      </div>
-    </form>
-
-    <div id="outputArea" class="output-box"></div>
+    <div class="button-group">
+      <button id="generateBtn">Generate Cover Letter & Score Resume</button>
+      <button id="demoBtn">Use Demo</button>
+    </div>
+    </div>
   </main>
 
   <footer>
