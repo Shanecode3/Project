@@ -97,7 +97,7 @@ input::placeholder {
 
 button {
   background-color: var(--accent);
-  color: #fff;
+  color: var(--accent);
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 6px;
