@@ -16,22 +16,42 @@
     </div>
   </nav>
 
-  <main class="privacy-container">
+  <main class="privacy-section">
     <h1>Privacy Policy</h1>
-    <p>Your privacy is important to us. This policy explains how we handle your data:</p>
+    <p>Your privacy matters. TailorMyLetter does not store or share your personal resume or job description data. All files are processed securely and temporarily for the generation task only.</p>
+
+    <h2>What We Collect</h2>
     <ul>
-      <li><strong>No Data Stored:</strong> We do not permanently store your uploaded resumes or job descriptions.</li>
-      <li><strong>No Tracking:</strong> We do not use third-party trackers or analytics.</li>
-      <li><strong>One-Time Use:</strong> Your data is processed in real-time to generate your results and then discarded.</li>
-      <li><strong>Secure Processing:</strong> All data is transferred using secure protocols.</li>
+      <li>No user accounts or login required</li>
+      <li>We do not store resumes or job descriptions</li>
+      <li>Only anonymous usage data for improving the service</li>
     </ul>
-    <p>If you have questions or concerns, feel free to contact our team.</p>
+
+    <h2>Third-party Services</h2>
+    <p>We use Stripe for secure payments and OpenRouter for AI-powered cover letter generation. These services handle data according to their own privacy policies.</p>
+
+    <h2>Your Rights</h2>
+    <p>You may clear your local usage history (one free usage) by clearing your browser’s local storage settings.</p>
   </main>
 
   <footer>
     <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
+    function applyTheme() {
+      const mode = localStorage.getItem("theme") || "light";
+      document.body.classList.toggle("dark", mode === "dark");
+      themeToggle.textContent = mode === "dark" ? "🌞 Theme" : "🌙 Theme";
+    }
+    themeToggle.addEventListener("click", () => {
+      const current = document.body.classList.contains("dark") ? "dark" : "light";
+      const next = current === "dark" ? "light" : "dark";
+      localStorage.setItem("theme", next);
+      applyTheme();
+    });
+    applyTheme();
+  </script>
 </body>
 </html>
