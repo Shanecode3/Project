@@ -325,3 +325,69 @@ footer {
 .fade-in {
   animation: slideFadeIn 0.6s ease-out;
 }
+/* Modern Navbar */
+.navbar {
+  width: 100%;
+  background: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nav-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #1a73e8;
+}
+
+#themeToggle {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* Dark mode navbar */
+body.dark .navbar {
+  background: #1c1c1c;
+}
+
+body.dark .logo {
+  color: #66aaff;
+}
+
+body.dark .nav-links a {
+  color: #eee;
+}
+
+body.dark .nav-links a:hover {
+  color: #66aaff;
+}
