@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pricing – TailorMyLetter</title>
-  <link rel="stylesheet" href="pricing.css" />
+  <link rel="stylesheet" href="style.css" />
   <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
@@ -39,7 +39,11 @@
       <h2>Pay Per Use</h2>
       <p class="price"><span id="priceDisplay"></span></p>
       <label for="currencySelector">Select Currency:</label>
-      <select id="currencySelector"></select>
+      <select id="currencySelector">
+        <option value="USD">$2.99 USD</option>
+        <option value="CAD">$2.49 CAD</option>
+        <option value="INR">₹79 INR</option>
+      </select>
       <ul>
         <li>✔️ New Cover Letter & Score</li>
         <li>✔️ Resume Tips from AI</li>
