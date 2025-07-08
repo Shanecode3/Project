@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pricing – TailorMyLetter</title>
   <link rel="stylesheet" href="pricing.css" />
   <script src="https://js.stripe.com/v3/"></script>
@@ -22,36 +22,31 @@
     <p>Start with a free tailored cover letter. Pay only when you're ready.</p>
   </header>
 
-  <main>
-    <div class="pricing-container">
-      <div class="plan free">
-        <h2>Free</h2>
-        <p class="price">$0</p>
-        <ul>
-          <li>✔️ 1 Full Cover Letter</li>
-          <li>✔️ Resume ATS Score</li>
-          <li>✔️ Personalized Tips</li>
-          <li>✔️ No Signup Needed</li>
-        </ul>
-        <p class="note">Use once per device</p>
-      </div>
+  <main class="pricing-container">
+    <div class="plan free">
+      <h2>Free</h2>
+      <p class="price">$0</p>
+      <ul>
+        <li>✔️ 1 Full Cover Letter</li>
+        <li>✔️ Resume ATS Score</li>
+        <li>✔️ Personalized Tips</li>
+        <li>✔️ No Signup Needed</li>
+      </ul>
+      <p class="note">Use once per device</p>
+    </div>
 
-      <div class="plan paid">
-        <h2>Pay Per Use</h2>
-        <p class="price">
-          <span id="highlightedPrice" style="font-weight: bold; font-size: 1.2em;"></span>
-        </p>
-        <p style="font-size: 0.95em; color: var(--text);">
-          Or <span>₹79 INR</span> / <span>$2.49 CAD</span> / <span>$2.99 USD</span>
-        </p>
-        <ul>
-          <li>✔️ New Cover Letter & Score</li>
-          <li>✔️ Resume Tips from AI</li>
-          <li>✔️ Download or Copy Letter</li>
-          <li>✔️ Instant Delivery</li>
-        </ul>
-        <button id="payNowBtn">Pay & Generate Again</button>
-      </div>
+    <div class="plan paid">
+      <h2>Pay Per Use</h2>
+      <p class="price"><span id="priceDisplay"></span></p>
+      <label for="currencySelector">Select Currency:</label>
+      <select id="currencySelector"></select>
+      <ul>
+        <li>✔️ New Cover Letter & Score</li>
+        <li>✔️ Resume Tips from AI</li>
+        <li>✔️ Download or Copy Letter</li>
+        <li>✔️ Instant Delivery</li>
+      </ul>
+      <button id="payNowBtn">Pay & Generate Again</button>
     </div>
   </main>
 
@@ -59,48 +54,8 @@
     <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
   </footer>
 
+  <script src="script.js"></script>
   <script>
-    const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
-    const highlightedPrice = document.getElementById("highlightedPrice");
-    const payBtn = document.getElementById("payNowBtn");
-
-    function getCurrencyByLocale() {
-      const region = Intl.DateTimeFormat().resolvedOptions().locale;
-      if (region.includes("IN")) return "INR";
-      if (region.includes("CA")) return "CAD";
-      return "USD";
-    }
-
-    function updateHighlightedPrice() {
-      const currency = getCurrencyByLocale();
-      let display = "$2.99 USD"; // default
-      if (currency === "INR") display = "₹79 INR";
-      else if (currency === "CAD") display = "$2.49 CAD";
-      highlightedPrice.textContent = `${display} (Your Region)`;
-    }
-
-    updateHighlightedPrice();
-
-    payBtn.addEventListener("click", async () => {
-      const currency = getCurrencyByLocale();
-      try {
-        const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ currency }),
-        });
-        const session = await res.json();
-        if (session.id) {
-          stripe.redirectToCheckout({ sessionId: session.id });
-        } else {
-          alert("Payment failed. Try again.");
-        }
-      } catch (err) {
-        console.error("Stripe error:", err);
-        alert("Unable to initiate payment.");
-      }
-    });
-
     const themeToggle = document.getElementById("themeToggle");
     function applyTheme() {
       const mode = localStorage.getItem("theme") || "light";
@@ -108,9 +63,8 @@
       themeToggle.textContent = mode === "dark" ? "🌞 Theme" : "🌙 Theme";
     }
     themeToggle.addEventListener("click", () => {
-      const current = document.body.classList.contains("dark") ? "dark" : "light";
-      const next = current === "dark" ? "light" : "dark";
-      localStorage.setItem("theme", next);
+      const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
+      localStorage.setItem("theme", newTheme);
       applyTheme();
     });
     applyTheme();
