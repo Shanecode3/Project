@@ -1,19 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 :root {
-  --bg: #f5f5f5;
-  --text: #222;
   --accent: #007bff;
-  --card: #ffffff;
-  --shadow: rgba(0, 0, 0, 0.08);
-}
-
-body.dark {
-  --bg: #121212;
-  --text: #eee;
-  --accent: #66aaff;
-  --card: #1e1e1e;
-  --shadow: rgba(255, 255, 255, 0.08);
+  --background: #f5f5f5;
+  --text: #222;
+  --dark-bg: #121212;
+  --dark-text: #eee;
 }
 
 * {
@@ -24,32 +16,60 @@ body.dark {
 
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(270deg, #f5f5f5, #ffffff, #f5f5f5);
-  background-size: 600% 600%;
+  background: var(--background);
   color: var(--text);
-  line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  animation: animatedBackground 25s ease infinite;
-  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Navbar */
+body.dark {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+header, footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  animation: fadeInSlide 1s ease-in-out;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+main {
+  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.back, .top-nav a {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.back:hover, .top-nav a:hover {
+  color: #004080;
+}
+
+footer {
+  margin-top: 3rem;
+  font-size: 0.9rem;
+}
+
 .top-nav {
-  width: 100%;
-  background: var(--card);
-  box-shadow: 0 2px 6px var(--shadow);
-  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  padding: 1rem 2rem;
+  background: transparent;
 }
 
 .top-nav .brand {
   font-size: 1.4rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--accent);
 }
 
@@ -58,136 +78,146 @@ body {
   align-items: center;
 }
 
-.top-nav .nav-links a {
-  margin-left: 1.5rem;
-  text-decoration: none;
-  color: var(--text);
+.top-nav a {
+  margin-right: 1.2rem;
   font-weight: 500;
-  transition: color 0.3s ease;
+  font-size: 1rem;
 }
 
-.top-nav .nav-links a:hover {
-  color: var(--accent);
-}
-
-#themeToggle {
+.top-nav #themeToggle {
   background: none;
   border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
+  font-size: 1.1rem;
   margin-left: 1rem;
-  color: var(--text);
-}
-
-/* Header & Footer */
-header,
-footer {
-  text-align: center;
-  padding: 2rem 1rem;
-}
-
-footer {
-  font-size: 0.9rem;
-  margin-top: 2rem;
-  color: #888;
-}
-
-/* Sections */
-main {
-  padding: 2rem;
-  max-width: 960px;
-  margin: auto;
-}
-
-/* Buttons */
-button,
-.btn {
-  background-color: var(--accent);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: none;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  color: inherit;
+  transition: transform 0.3s;
 }
 
-button:hover,
-.btn:hover {
-  background-color: #0056b3;
-  transform: scale(1.02);
+.top-nav #themeToggle:hover {
+  transform: scale(1.1);
 }
 
-button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
+/* Pricing page */
+.pricing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 }
 
-/* Forms */
-textarea,
-select,
-input[type="file"] {
+.plan {
+  border: 2px solid #ccc;
+  padding: 2rem;
+  border-radius: 15px;
+  max-width: 400px;
   width: 100%;
-  padding: 0.7rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #fff;
-  font-family: 'Inter', sans-serif;
-}
-
-body.dark textarea,
-body.dark select,
-body.dark input[type="file"] {
-  background: #1e1e1e;
-  color: #eee;
-  border: 1px solid #444;
-}
-
-/* ATS Score Bar */
-.score-bar {
-  height: 20px;
-  background: #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-  margin: 1rem 0;
-}
-
-.score-bar-fill {
-  height: 100%;
-  width: 0;
-  background: #28a745;
   text-align: center;
-  color: #fff;
-  line-height: 20px;
-  font-weight: 600;
-  transition: width 0.5s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  transition: transform 0.4s ease, background 0.4s ease;
+  animation: zoomIn 0.7s ease forwards;
 }
 
-/* Results Section */
-.results-section {
-  margin-top: 2rem;
-  display: none;
+.plan:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--accent);
+  background: linear-gradient(135deg, #ffffff, #f0f8ff);
 }
 
-ul#atsFeedback {
-  margin-top: 1rem;
-  padding-left: 1rem;
-}
-
-ul#atsFeedback li {
+.plan h2 {
+  font-size: 1.8rem;
   margin-bottom: 0.5rem;
 }
 
-/* Animations */
-@keyframes animatedBackground {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.plan .price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.plan ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.plan ul li {
+  margin: 0.5rem 0;
+}
+
+.plan .note {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+button#payNowBtn {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button#payNowBtn:hover {
+  background-color: #0056b3;
+}
+
+/* Results section (for ATS score & letter) */
+.results-section {
+  display: none;
+  margin-top: 2rem;
+  animation: fadeInSlide 1s ease-in-out;
+}
+
+.score-bar-fill {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+  transition: width 0.3s ease;
+  border-radius: 5px;
+  margin: 0.5rem 0;
+}
+
+/* Dark mode overrides */
+body.dark .plan {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark .plan:hover {
+  background: #292929;
+  border-color: #3399ff;
+}
+
+body.dark .back,
+body.dark .top-nav a {
+  color: #66aaff;
+}
+
+body.dark .back:hover,
+body.dark .top-nav a:hover {
+  color: #3399ff;
+}
+
+body.dark button#payNowBtn {
+  background-color: #0099ff;
+}
+
+body.dark button#payNowBtn:hover {
+  background-color: #007acc;
 }
 
 @keyframes fadeInSlide {
   0% { opacity: 0; transform: translateY(-30px); }
   100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
 }
