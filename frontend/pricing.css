@@ -166,3 +166,48 @@ body.dark button#payNowBtn:hover {
     transform: scale(1);
   }
 }
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: transparent;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.top-nav a {
+  color: var(--text);
+  text-decoration: none;
+  margin-right: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.top-nav a:hover {
+  color: var(--accent);
+}
+
+.top-nav .brand {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.top-nav .nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav #themeToggle {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  color: var(--text);
+  transition: transform 0.3s;
+}
+
+.top-nav #themeToggle:hover {
+  transform: scale(1.1);
+}
