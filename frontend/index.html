@@ -16,26 +16,38 @@
     </div>
   </nav>
 
-  <main class="form-container">
-    <div class="form-container">
-      <h2>Generate Your Perfect Cover Letter</h2>
-      <label for="resumeUpload">Upload Resume (PDF or TXT)</label>
-      <input type="file" id="resumeUpload" />
+  <main class="form-section">
+    <h2>Generate Your Perfect Cover Letter</h2>
 
-      <label for="jobDescription">Paste Job Description</label>
-      <textarea id="jobDescription" rows="4" placeholder="Enter the job description..."></textarea>
+    <label for="resumeFile">Upload Resume (PDF or TXT)</label>
+    <input type="file" id="resumeFile" />
 
-      <label for="toneSelect">Preferred Tone</label>
-      <select id="toneSelect">
-        <option>Enthusiastic</option>
-        <option>Professional</option>
-        <option>Friendly</option>
-      </select>
+    <label for="jobDescription">Paste Job Description</label>
+    <textarea id="jobDescription" rows="4" placeholder="Enter the job description..."></textarea>
+
+    <label for="tone">Preferred Tone</label>
+    <select id="tone">
+      <option value="enthusiastic">Enthusiastic</option>
+      <option value="professional">Professional</option>
+      <option value="friendly">Friendly</option>
+    </select>
 
     <div class="button-group">
       <button id="generateBtn">Generate Cover Letter & Score Resume</button>
-      <button id="demoBtn">Use Demo</button>
+      <button id="demoBtn" onclick="fillDemo()">Use Demo</button>
     </div>
+
+    <div class="results-section" style="display: none;">
+      <h3>AI-Generated Cover Letter</h3>
+      <textarea id="coverLetterOutput" readonly></textarea>
+
+      <h4>ATS Match Score</h4>
+      <div class="score-bar">
+        <div class="score-bar-fill">0%</div>
+      </div>
+
+      <h4>AI Feedback</h4>
+      <ul id="atsFeedback"></ul>
     </div>
   </main>
 
@@ -43,6 +55,7 @@
     <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
   <script src="script.js"></script>
   <script>
     const themeToggle = document.getElementById("themeToggle");
@@ -52,9 +65,8 @@
       themeToggle.textContent = mode === "dark" ? "🌞 Theme" : "🌙 Theme";
     }
     themeToggle.addEventListener("click", () => {
-      const current = document.body.classList.contains("dark") ? "dark" : "light";
-      const next = current === "dark" ? "light" : "dark";
-      localStorage.setItem("theme", next);
+      const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
+      localStorage.setItem("theme", newTheme);
       applyTheme();
     });
     applyTheme();
