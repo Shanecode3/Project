@@ -72,7 +72,12 @@
     }
 
     payBtn.addEventListener("click", async () => {
-      const currency = getCurrencyByLocale();
+      let currency = getCurrencyByLocale();
+      const manualSelect = document.getElementById("currencySelector");
+      if (manualSelect && manualSelect.value) {
+        currency = manualSelect.value;
+      }
+
 
       try {
         const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
