@@ -1,3 +1,6 @@
+const admin = require("./firebase");
+const authenticateFirebase = require("./middleware/auth");
+const userDb = require("./db/user");
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -50,8 +53,20 @@ app.post("/create-checkout-session", async (req, res) => {
   }
 });
 
-app.post("/generate", async (req, res) => {
+app.post("/generate", authenticateFirebase, async (req, res) => {
   const { resume, jobDescription, tone } = req.body;
+  const { firebaseUid, firebaseEmail } = req;
+
+  // 1. Ensure user exists
+  await userDb.createUserIfNotExists(firebaseUid, firebaseEmail);
+
+  // 2. Fetch user and check free trial
+  const user = await userDb.getUserByFirebaseUid(firebaseUid);
+  if (!user) return res.status(500).json({ error: "User creation failed." });
+
+  if (user.has_used_free_trial) {
+    return res.status(403).json({ error: "Free trial already used. Please subscribe." });
+  }
   const prompt = `
 You are an expert job assistant. Using the resume and job description below, do the following:
 
@@ -108,6 +123,8 @@ ${jobDescription}
     } catch (err) {
       return res.status(500).json({ error: "Invalid JSON returned from AI." });
     }
+
+    await userDb.setFreeTrialUsed(firebaseUid);
 
     res.json(json);
   } catch (err) {
