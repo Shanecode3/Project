@@ -67,10 +67,10 @@ function signOut() {
 auth.onAuthStateChanged((user) => {
   if (user && user.emailVerified) {
     document.getElementById("auth-section").style.display = "none";
-    document.getElementByClassName("form-section").style.display = "block";
+    document.getElementById("app-section").style.display = "block";
   } else {
     document.getElementById("auth-section").style.display = "block";
-    document.getElementByClassName("form-section").style.display = "none";
+    document.getElementById("app-section").style.display = "none";
   }
 });
 
