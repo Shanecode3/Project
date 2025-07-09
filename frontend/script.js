@@ -1,6 +1,9 @@
 // Global Stripe instance
 const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
+// Flag to track demo mode
+let isDemoMode = false;
+
 document.addEventListener("DOMContentLoaded", () => {
   applyTheme();
 
@@ -9,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
 });
 
-// Detect currency
+// Detect currency for payment
 function getCurrency() {
   const region = Intl.DateTimeFormat().resolvedOptions().locale;
   if (region.includes("IN")) return "INR";
@@ -17,7 +20,7 @@ function getCurrency() {
   return "USD";
 }
 
-// Theme Toggle
+// Theme toggle
 function applyTheme() {
   const isDark = localStorage.getItem("darkMode") === "true";
   document.body.classList.toggle("dark", isDark);
@@ -31,10 +34,10 @@ function toggleTheme() {
   applyTheme();
 }
 
-let isDemoMode = false;
-
+// Fill demo inputs
 function fillDemo() {
   isDemoMode = true;
+
   document.getElementById("jobDescription").value = `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
 
   const blob = new Blob([`John Doe is a developer skilled in React, Node.js, MongoDB, REST APIs.`], { type: "text/plain" });
@@ -46,7 +49,7 @@ function fillDemo() {
   document.getElementById("tone").value = "enthusiastic";
 }
 
-// Generate button click handler
+// Generate button click
 function handleGenerateClick() {
   const jobDescription = document.getElementById("jobDescription").value.trim();
   const tone = document.getElementById("tone").value;
@@ -57,13 +60,13 @@ function handleGenerateClick() {
     return;
   }
 
-  const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
-
-  // If it's demo mode, just run directly without setting usedFree or Stripe
+  // Skip payment check if demo is used
   if (isDemoMode) {
     processFile(fileInput.files[0], jobDescription, tone);
     return;
   }
+
+  const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
 
   if (alreadyUsedFree) {
     const currency = getCurrency();
@@ -79,15 +82,20 @@ function handleGenerateClick() {
         } else {
           alert("Payment failed. Try again.");
         }
+      })
+      .catch((err) => {
+        console.error("Stripe error:", err);
+        alert("Something went wrong with payment. Please try again.");
       });
     return;
   }
 
-  // First-time real use — mark as used
+  // First-time real generation
   localStorage.setItem("usedFree", "true");
   processFile(fileInput.files[0], jobDescription, tone);
+}
 
-// Resume parsing and AI request
+// Resume parsing and AI generation
 function processFile(file, jobDescription, tone) {
   const button = document.getElementById("generateBtn");
   button.disabled = true;
@@ -131,8 +139,8 @@ function processFile(file, jobDescription, tone) {
       });
     } catch (err) {
       loader.remove();
-      alert("Something went wrong. Check console.");
-      console.error(err);
+      console.error("AI Generation Error:", err);
+      alert("Something went wrong while generating. Try again.");
     }
 
     button.disabled = false;
@@ -141,8 +149,7 @@ function processFile(file, jobDescription, tone) {
 
   if (file.type === "application/pdf") {
     const pdfjsLib = window["pdfjs-dist/build/pdf"];
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
 
     const reader = new FileReader();
     reader.onload = function () {
