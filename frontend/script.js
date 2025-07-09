@@ -1,4 +1,83 @@
-// Global Stripe instance
+const firebaseConfig = {
+  apiKey: "AIzaSyDHvbxZ8vwS46KAoUV0MojM86pmSVWANF0",
+  authDomain: "tailormyletter.firebaseapp.com",
+  projectId: "tailormyletter",
+  storageBucket: "tailormyletter.firebasestorage.app",
+  messagingSenderId: "937811770956",
+  appId: "1:937811770956:web:16392c7432d0d7a0a6bee9",
+  measurementId: "G-MVXGR8WEC7"
+};
+
+  // Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+function signUp() {
+  const email = document.getElementById("auth-email").value;
+  const password = document.getElementById("auth-password").value;
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      userCredential.user.sendEmailVerification()
+        .then(() => {
+          document.getElementById("auth-message").innerText = "Verification email sent! Please check your inbox.";
+        });
+    })
+    .catch(err => {
+      document.getElementById("auth-message").innerText = err.message;
+    });
+}
+
+function login() {
+  const email = document.getElementById("auth-email").value;
+  const password = document.getElementById("auth-password").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      if (!userCredential.user.emailVerified) {
+        document.getElementById("auth-message").innerText = "Please verify your email first (check your inbox).";
+        auth.signOut();
+      } else {
+        document.getElementById("auth-message").innerText = "Login successful!";
+        // Hide auth UI, show app UI
+      }
+    })
+    .catch(err => {
+      document.getElementById("auth-message").innerText = err.message;
+    });
+}
+
+function sendVerification() {
+  const user = auth.currentUser;
+  if (user && !user.emailVerified) {
+    user.sendEmailVerification()
+      .then(() => {
+        document.getElementById("auth-message").innerText = "Verification email sent!";
+      });
+  } else {
+    document.getElementById("auth-message").innerText = "Log in first or already verified.";
+  }
+}
+
+function signOut() {
+  auth.signOut().then(() => {
+    document.getElementById("auth-message").innerText = "Signed out!";
+    // Show auth UI, hide app UI
+  });
+}
+
+// Optionally, on page load, show/hide auth UI:
+auth.onAuthStateChanged((user) => {
+  if (user && user.emailVerified) {
+    document.getElementById("auth-section").style.display = "none";
+    // document.getElementById("app-section").style.display = "block";
+  } else {
+    document.getElementById("auth-section").style.display = "block";
+    // document.getElementById("app-section").style.display = "none";
+  }
+});
+
 const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
 // Flag to track demo mode
