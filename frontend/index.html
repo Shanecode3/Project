@@ -57,19 +57,5 @@
   </footer>
 
   <script src="script.js"></script>
-  <script>
-    const themeToggle = document.getElementById("themeToggle");
-    function applyTheme() {
-      const mode = localStorage.getItem("theme") || "light";
-      document.body.classList.toggle("dark", mode === "dark");
-      themeToggle.textContent = mode === "dark" ? "🌞 Theme" : "🌙 Theme";
-    }
-    themeToggle.addEventListener("click", () => {
-      const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
-      localStorage.setItem("theme", newTheme);
-      applyTheme();
-    });
-    applyTheme();
-  </script>
 </body>
 </html>
