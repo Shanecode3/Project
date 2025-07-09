@@ -1,3 +1,4 @@
+const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 document.addEventListener("DOMContentLoaded", () => {
   applyTheme();
   document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
@@ -28,7 +29,6 @@ if (generateBtn) {
 
       const session = await res.json();
       if (session.id) {
-        const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
         return stripe.redirectToCheckout({ sessionId: session.id });
       } else {
         alert("Payment failed. Try again.");
@@ -42,8 +42,6 @@ if (generateBtn) {
   });
 }
 });
-// Stripe instance
-const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
 // Detect currency
 function getCurrency() {
