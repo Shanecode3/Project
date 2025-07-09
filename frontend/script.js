@@ -31,14 +31,18 @@ function toggleTheme() {
   applyTheme();
 }
 
-// Demo filler
+let isDemoMode = false;
+
 function fillDemo() {
+  isDemoMode = true;
   document.getElementById("jobDescription").value = `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
+
   const blob = new Blob([`John Doe is a developer skilled in React, Node.js, MongoDB, REST APIs.`], { type: "text/plain" });
   const file = new File([blob], "resume.txt", { type: "text/plain" });
   const dt = new DataTransfer();
   dt.items.add(file);
   document.getElementById("resumeFile").files = dt.files;
+
   document.getElementById("tone").value = "enthusiastic";
 }
 
@@ -54,6 +58,12 @@ function handleGenerateClick() {
   }
 
   const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
+
+  // If it's demo mode, just run directly without setting usedFree or Stripe
+  if (isDemoMode) {
+    processFile(fileInput.files[0], jobDescription, tone);
+    return;
+  }
 
   if (alreadyUsedFree) {
     const currency = getCurrency();
@@ -73,10 +83,9 @@ function handleGenerateClick() {
     return;
   }
 
-  // First time use
+  // First-time real use — mark as used
   localStorage.setItem("usedFree", "true");
   processFile(fileInput.files[0], jobDescription, tone);
-}
 
 // Resume parsing and AI request
 function processFile(file, jobDescription, tone) {
