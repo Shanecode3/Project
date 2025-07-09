@@ -23,6 +23,17 @@
     </div>
   </nav>
 
+  <div id="auth-section">
+    <h3>Sign Up / Login</h3>
+    <input type="email" id="auth-email" placeholder="Email" required />
+    <input type="password" id="auth-password" placeholder="Password" required />
+    <button onclick="signUp()">Sign Up</button>
+    <button onclick="login()">Login</button>
+    <button onclick="sendVerification()">Resend Verification Email</button>
+    <button onclick="signOut()">Sign Out</button>
+    <div id="auth-message"></div>
+  </div>
+
   <main class="form-section">
     <h2>Generate Your Perfect Cover Letter</h2>
 
@@ -57,7 +68,6 @@
       <ul id="atsFeedback"></ul>
     </div>
   </main>
-
   <footer>
     <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
   </footer>
