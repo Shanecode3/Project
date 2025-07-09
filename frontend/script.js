@@ -74,6 +74,22 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
+function forgotPassword() {
+  const email = document.getElementById("auth-email").value;
+  if (!email) {
+    document.getElementById("auth-message").innerText = "Please enter your email above to reset your password.";
+    return;
+  }
+  auth.sendPasswordResetEmail(email)
+    .then(() => {
+      document.getElementById("auth-message").innerText = "Password reset email sent! Please check your inbox.";
+    })
+    .catch((error) => {
+      document.getElementById("auth-message").innerText = error.message;
+    });
+}
+
+
 const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
 // Flag to track demo mode
