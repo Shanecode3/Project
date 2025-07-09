@@ -25,14 +25,6 @@ function getCurrency() {
   return "USD";
 }
 
-// Theme toggle
-function applyTheme() {
-  const isDark = localStorage.getItem("darkMode") === "true";
-  document.body.classList.toggle("dark", isDark);
-  const btn = document.getElementById("themeToggle");
-  if (btn) btn.textContent = isDark ? "🌞 Theme" : "🌙 Theme";
-}
-
 function toggleTheme() {
   const darkNow = !document.body.classList.contains("dark");
   localStorage.setItem("darkMode", darkNow);
