@@ -3,6 +3,44 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
   document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
   document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
+  const generateBtn = document.getElementById("generateBtn");
+
+if (generateBtn) {
+  generateBtn.addEventListener("click", async () => {
+    const jobDescription = document.getElementById("jobDescription").value.trim();
+    const tone = document.getElementById("tone").value;
+    const fileInput = document.getElementById("resumeFile");
+
+    if (!fileInput.files.length || !jobDescription) {
+      alert("Please upload a resume and paste a job description.");
+      return;
+    }
+
+    const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
+
+    if (alreadyUsedFree) {
+      const currency = document.getElementById("currencySelector")?.value || "USD";
+      const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currency }),
+      });
+
+      const session = await res.json();
+      if (session.id) {
+        const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      } else {
+        alert("Payment failed. Try again.");
+        return;
+      }
+    }
+
+    // First time free use
+    localStorage.setItem("usedFree", "true");
+    processFile(fileInput.files[0], jobDescription, tone);
+  });
+}
 });
 // Stripe instance
 const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
