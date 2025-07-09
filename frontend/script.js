@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
   document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
   document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
+
+  // Reset demo mode if user manually edits any input
+  document.getElementById("jobDescription").addEventListener("input", () => isDemoMode = false);
+  document.getElementById("resumeFile").addEventListener("change", () => isDemoMode = false);
+  document.getElementById("tone").addEventListener("change", () => isDemoMode = false);
 });
 
 // Detect currency for payment
@@ -69,24 +74,9 @@ function handleGenerateClick() {
   const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
 
   if (alreadyUsedFree) {
-    const currency = getCurrency();
-    fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ currency }),
-    })
-      .then((res) => res.json())
-      .then((session) => {
-        if (session.id) {
-          stripe.redirectToCheckout({ sessionId: session.id });
-        } else {
-          alert("Payment failed. Try again.");
-        }
-      })
-      .catch((err) => {
-        console.error("Stripe error:", err);
-        alert("Something went wrong with payment. Please try again.");
-      });
+    // Show popup, then redirect to pricing
+    alert("You’ve used your free trial. Please upgrade to generate more cover letters!");
+    window.location.href = "pricing.html";
     return;
   }
 
