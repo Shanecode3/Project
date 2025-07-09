@@ -1,49 +1,14 @@
+// Global Stripe instance
+const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
 document.addEventListener("DOMContentLoaded", () => {
   applyTheme();
+
   document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
   document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
   document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
-  const generateBtn = document.getElementById("generateBtn");
-
-if (generateBtn) {
-  generateBtn.addEventListener("click", async () => {
-    const jobDescription = document.getElementById("jobDescription").value.trim();
-    const tone = document.getElementById("tone").value;
-    const fileInput = document.getElementById("resumeFile");
-
-    if (!fileInput.files.length || !jobDescription) {
-      alert("Please upload a resume and paste a job description.");
-      return;
-    }
-
-    const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
-
-    if (alreadyUsedFree) {
-      const currency = document.getElementById("currencySelector")?.value || "USD";
-      const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currency }),
-      });
-
-      const session = await res.json();
-      if (session.id) {
-        const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
-        return stripe.redirectToCheckout({ sessionId: session.id });
-      } else {
-        alert("Payment failed. Try again.");
-        return;
-      }
-    }
-
-    // First time free use
-    localStorage.setItem("usedFree", "true");
-    processFile(fileInput.files[0], jobDescription, tone);
-  });
-}
 });
-const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
+
 // Detect currency
 function getCurrency() {
   const region = Intl.DateTimeFormat().resolvedOptions().locale;
@@ -66,13 +31,10 @@ function toggleTheme() {
   applyTheme();
 }
 
+// Demo filler
 function fillDemo() {
-  document.getElementById("jobDescription").value =
-    `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
-  const blob = new Blob(
-    [`John Doe is a developer skilled in React, Node.js, MongoDB, REST APIs.`],
-    { type: "text/plain" }
-  );
+  document.getElementById("jobDescription").value = `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
+  const blob = new Blob([`John Doe is a developer skilled in React, Node.js, MongoDB, REST APIs.`], { type: "text/plain" });
   const file = new File([blob], "resume.txt", { type: "text/plain" });
   const dt = new DataTransfer();
   dt.items.add(file);
@@ -80,6 +42,43 @@ function fillDemo() {
   document.getElementById("tone").value = "enthusiastic";
 }
 
+// Generate button click handler
+function handleGenerateClick() {
+  const jobDescription = document.getElementById("jobDescription").value.trim();
+  const tone = document.getElementById("tone").value;
+  const fileInput = document.getElementById("resumeFile");
+
+  if (!fileInput.files.length || !jobDescription) {
+    alert("Please upload a resume file and paste the job description.");
+    return;
+  }
+
+  const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
+
+  if (alreadyUsedFree) {
+    const currency = getCurrency();
+    fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currency }),
+    })
+      .then((res) => res.json())
+      .then((session) => {
+        if (session.id) {
+          stripe.redirectToCheckout({ sessionId: session.id });
+        } else {
+          alert("Payment failed. Try again.");
+        }
+      });
+    return;
+  }
+
+  // First time use
+  localStorage.setItem("usedFree", "true");
+  processFile(fileInput.files[0], jobDescription, tone);
+}
+
+// Resume parsing and AI request
 function processFile(file, jobDescription, tone) {
   const button = document.getElementById("generateBtn");
   button.disabled = true;
@@ -107,8 +106,7 @@ function processFile(file, jobDescription, tone) {
       }
 
       document.querySelector(".results-section").style.display = "block";
-      document.getElementById("coverLetterOutput").value =
-        data.coverLetter || "No letter generated.";
+      document.getElementById("coverLetterOutput").value = data.coverLetter || "No letter generated.";
 
       const score = data.score || 0;
       const bar = document.querySelector(".score-bar-fill");
@@ -166,38 +164,3 @@ function processFile(file, jobDescription, tone) {
     reader.readAsText(file);
   }
 }
-
-function handleGenerateClick() {
-  const jobDescription = document.getElementById("jobDescription").value.trim();
-  const tone = document.getElementById("tone").value;
-  const fileInput = document.getElementById("resumeFile");
-
-  if (!fileInput.files.length || !jobDescription) {
-    alert("Please upload a resume file and paste the job description.");
-    return;
-  }
-
-  const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
-
-  if (alreadyUsedFree) {
-    const currency = getCurrency();
-    fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ currency }),
-    })
-      .then(res => res.json())
-      .then(session => {
-        if (session.id) {
-          stripe.redirectToCheckout({ sessionId: session.id });
-        } else {
-          alert("Payment failed. Try again.");
-        }
-      });
-    return;
-  }
-
-  localStorage.setItem("usedFree", "true");
-  processFile(fileInput.files[0], jobDescription, tone);
-}
-
