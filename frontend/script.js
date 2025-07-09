@@ -80,9 +80,6 @@ const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNl
 let isDemoMode = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-  applyTheme();
-
-  document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
   document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
   document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
 
@@ -99,13 +96,6 @@ function getCurrency() {
   if (region.includes("CA")) return "CAD";
   return "USD";
 }
-
-function toggleTheme() {
-  const darkNow = !document.body.classList.contains("dark");
-  localStorage.setItem("darkMode", darkNow);
-  applyTheme();
-}
-
 // Fill demo inputs
 function fillDemo() {
   isDemoMode = true;
