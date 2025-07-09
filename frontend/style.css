@@ -157,6 +157,18 @@ body {
   text-decoration: none;
 }
 
+#auth-section .auth-inputs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.8em;
+}
+
+#auth-section .auth-inputs input {
+  margin-bottom: 0.6em;
+}
+
 /* App Main Section */
 main {
   padding: 2rem;
