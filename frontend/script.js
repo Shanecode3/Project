@@ -7,25 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const generateBtn = document.getElementById("generateBtn");
 
 if (generateBtn) {
-  generateBtn.addEventListener("click", async () => {
-    const jobDescription = document.getElementById("jobDescription").value.trim();
-    const tone = document.getElementById("tone").value;
-    const fileInput = document.getElementById("resumeFile");
-
-    if (!fileInput.files.length || !jobDescription) {
-      alert("Please upload a resume and paste a job description.");
-      return;
-    }
-
-    const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
-
-    if (alreadyUsedFree) {
-      const currency = document.getElementById("currencySelector")?.value || "USD";
-      const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currency }),
-      });
 
       const session = await res.json();
       if (session.id) {
