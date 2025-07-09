@@ -24,19 +24,23 @@
     </div>
   </nav>
 
-  <div class="auth-buttons-row">
-    <button onclick="signUp()">Sign Up</button>
-    <button onclick="login()">Login</button>
-    <button onclick="sendVerification()">Resend Verification Email</button>
-    <button onclick="signOut()">Sign Out</button>
+  <div id="auth-section">
+    <h3>Sign Up / Login</h3>
+    <div class="auth-inputs">
+      <input type="email" id="auth-email" placeholder="Email" required />
+      <input type="password" id="auth-password" placeholder="Password" required />
+    </div>
+    <div class="auth-buttons-row">
+      <button onclick="signUp()">Sign Up</button>
+      <button onclick="login()">Login</button>
+      <button onclick="sendVerification()">Resend Verification Email</button>
+      <button onclick="signOut()">Sign Out</button>
+    </div>
+    <a href="#" id="forgot-password-link" onclick="forgotPassword();return false;">
+      Forgot password?
+    </a>
+    <div id="auth-message"></div>
   </div>
-
-  <a href="#" id="forgot-password-link" onclick="forgotPassword();return false;">
-    Forgot password?
-  </a>
-
-  <div id="auth-message"></div>
-
 
   <main id="app-section" class="form-section" style="display:none;">
     <div style="text-align:right;">
