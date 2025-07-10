@@ -148,10 +148,14 @@ app.listen(PORT, "0.0.0.0", () => {
 
 app.post("/register", authenticateFirebase, async (req, res) => {
   const { firebaseUid, firebaseEmail } = req;
+  console.log("[REGISTER] Called with:", { firebaseUid, firebaseEmail });
+
   try {
     await userDb.createUserIfNotExists(firebaseUid, firebaseEmail);
     res.status(200).json({ success: true });
   } catch (err) {
+    console.error("[REGISTER] DB Error:", err); // This shows up in Logs tab
     res.status(500).json({ error: "Failed to register user." });
   }
 });
+
