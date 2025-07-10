@@ -106,7 +106,6 @@ if (typeof firebase !== "undefined") {
     }
   });
 
-  // Attach auth functions if elements exist
   document.addEventListener("DOMContentLoaded", () => {
     const signupBtn = document.querySelector('[onclick="signUp()"]');
     const loginBtn = document.querySelector('[onclick="login()"]');
@@ -121,10 +120,8 @@ if (typeof firebase !== "undefined") {
   });
 }
 
-// === STRIPE SETUP ===
 const stripe = (typeof Stripe !== "undefined") ? Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0") : null;
 
-// === DEMO / GENERATE ===
 let isDemoMode = false;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -201,11 +198,21 @@ function processFile(file, jobDescription, tone) {
 
   const processResumeAndGenerate = async (resume) => {
     try {
+      // === FETCH THE FIREBASE TOKEN, ADD IT TO THE HEADER ===
+      let idToken = "";
+      if (typeof firebase !== "undefined" && firebase.auth().currentUser) {
+        idToken = await firebase.auth().currentUser.getIdToken();
+      }
+
+      const headers = { "Content-Type": "application/json" };
+      if (idToken) headers["Authorization"] = "Bearer " + idToken;
+
       const response = await fetch("https://tailormyletter-backend.onrender.com/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: headers,
         body: JSON.stringify({ resume, jobDescription, tone }),
       });
+
       const data = await response.json();
       loader.remove();
       if (data.error) {
