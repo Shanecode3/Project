@@ -368,3 +368,35 @@ function processRealFile(file, jobDescription, tone, idToken, button) {
     reader.readAsText(file);
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const scrollArrow = document.getElementById("scroll-to-auth");
+  if (scrollArrow) {
+    scrollArrow.addEventListener("click", () => {
+      const authSec = document.getElementById("auth-section");
+      if (authSec) {
+        authSec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+});
+
+function hideLandingIfLoggedIn() {
+  const user = typeof firebase !== "undefined" ? firebase.auth().currentUser : null;
+  const landingSection = document.getElementById("landing-section");
+  const authSection = document.getElementById("auth-section");
+  const appSection = document.getElementById("app-section");
+  if (user && user.emailVerified) {
+    if (landingSection) landingSection.style.display = "none";
+    if (authSection) authSection.style.display = "none";
+    if (appSection) appSection.style.display = "block";
+  } else {
+    if (landingSection) landingSection.style.display = "";
+    if (authSection) authSection.style.display = "";
+    if (appSection) appSection.style.display = "none";
+  }
+}
+
+if (typeof firebase !== "undefined") {
+  firebase.auth().onAuthStateChanged(hideLandingIfLoggedIn);
+}
