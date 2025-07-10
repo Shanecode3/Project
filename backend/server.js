@@ -13,9 +13,20 @@ dotenv.config();
 const app = express();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://tailormyletter.vercel.app",
+    "http://localhost:3000"
+  ],
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "/")));
+
+app.get("/", (req, res) => {
+  res.json({ status: "TailorMyLetter backend running!" });
+});
 
 const LOOKUP_KEYS = {
   INR: "premium_inr",
@@ -57,16 +68,14 @@ app.post("/generate", authenticateFirebase, async (req, res) => {
   const { resume, jobDescription, tone } = req.body;
   const { firebaseUid, firebaseEmail } = req;
 
-  // 1. Ensure user exists
   await userDb.createUserIfNotExists(firebaseUid, firebaseEmail);
-
-  // 2. Fetch user and check free trial
   const user = await userDb.getUserByFirebaseUid(firebaseUid);
   if (!user) return res.status(500).json({ error: "User creation failed." });
 
   if (user.has_used_free_trial) {
     return res.status(403).json({ error: "Free trial already used. Please subscribe." });
   }
+
   const prompt = `
 You are an expert job assistant. Using the resume and job description below, do the following:
 
