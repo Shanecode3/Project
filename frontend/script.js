@@ -47,6 +47,17 @@ if (typeof firebase !== "undefined") {
           auth.signOut();
         } else {
           if (msg) msg.innerText = "Login successful!";
+
+          userCredential.user.getIdToken().then(idToken => {
+            fetch("https://tailormyletter-backend.onrender.com/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + idToken
+              },
+              body: JSON.stringify({})
+            });
+          });
         }
       })
       .catch(err => {
