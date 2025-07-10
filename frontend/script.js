@@ -36,7 +36,6 @@ function login() {
         auth.signOut();
       } else {
         document.getElementById("auth-message").innerText = "Login successful!";
-        // Hide auth UI, show app UI
       }
     })
     .catch(err => {
@@ -59,11 +58,9 @@ function sendVerification() {
 function signOut() {
   auth.signOut().then(() => {
     document.getElementById("auth-message").innerText = "Signed out!";
-    // Show auth UI, hide app UI
   });
 }
 
-// Optionally, on page load, show/hide auth UI:
 auth.onAuthStateChanged((user) => {
   if (user && user.emailVerified) {
     document.getElementById("auth-section").style.display = "none";
@@ -89,77 +86,60 @@ function forgotPassword() {
     });
 }
 
-
 const stripe = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0");
 
-// Flag to track demo mode
 let isDemoMode = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("demoBtn")?.addEventListener("click", fillDemo);
   document.getElementById("generateBtn")?.addEventListener("click", handleGenerateClick);
 
-  // Reset demo mode if user manually edits any input
   document.getElementById("jobDescription").addEventListener("input", () => isDemoMode = false);
   document.getElementById("resumeFile").addEventListener("change", () => isDemoMode = false);
   document.getElementById("tone").addEventListener("change", () => isDemoMode = false);
 });
 
-// Detect currency for payment
 function getCurrency() {
   const region = Intl.DateTimeFormat().resolvedOptions().locale;
   if (region.includes("IN")) return "INR";
   if (region.includes("CA")) return "CAD";
   return "USD";
 }
-// Fill demo inputs
+
 function fillDemo() {
   isDemoMode = true;
-
   document.getElementById("jobDescription").value = `We're seeking a full-stack developer with experience in React, Node.js, and RESTful services.`;
-
   const blob = new Blob([`John Doe is a developer skilled in React, Node.js, MongoDB, REST APIs.`], { type: "text/plain" });
   const file = new File([blob], "resume.txt", { type: "text/plain" });
   const dt = new DataTransfer();
   dt.items.add(file);
   document.getElementById("resumeFile").files = dt.files;
-
   document.getElementById("tone").value = "enthusiastic";
 }
 
-// Generate button click
 function handleGenerateClick() {
   const jobDescription = document.getElementById("jobDescription").value.trim();
   const tone = document.getElementById("tone").value;
   const fileInput = document.getElementById("resumeFile");
-
   if (!fileInput.files.length || !jobDescription) {
     alert("Please upload a resume file and paste the job description.");
     return;
   }
-
-  // Skip payment check if demo is used
   if (isDemoMode) {
-    processFile(fileInput.files[0], jobDescription, tone);
+    processFile(fileInput.files[0], jobDescription, tone, true);
     return;
   }
-
   const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
-
   if (alreadyUsedFree) {
-    // Show popup, then redirect to pricing
     alert("You’ve used your free trial. Please upgrade to generate more cover letters!");
     window.location.href = "pricing.html";
     return;
   }
-
-  // First-time real generation
   localStorage.setItem("usedFree", "true");
-  processFile(fileInput.files[0], jobDescription, tone);
+  processFile(fileInput.files[0], jobDescription, tone, false);
 }
 
-// Resume parsing and AI generation
-function processFile(file, jobDescription, tone) {
+function processFile(file, jobDescription, tone, demoMode = false) {
   const button = document.getElementById("generateBtn");
   button.disabled = true;
   button.textContent = "Generating...";
@@ -171,9 +151,22 @@ function processFile(file, jobDescription, tone) {
 
   const processResumeAndGenerate = async (resume) => {
     try {
+      let headers = { "Content-Type": "application/json" };
+      if (!demoMode) {
+        const user = firebase.auth().currentUser;
+        if (!user) {
+          loader.remove();
+          alert("You must be logged in!");
+          button.disabled = false;
+          button.textContent = "Generate Cover Letter & Score Resume";
+          return;
+        }
+        const idToken = await user.getIdToken();
+        headers["Authorization"] = `Bearer ${idToken}`;
+      }
       const response = await fetch("https://tailormyletter-backend.onrender.com/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ resume, jobDescription, tone }),
       });
 
@@ -205,7 +198,6 @@ function processFile(file, jobDescription, tone) {
       console.error("AI Generation Error:", err);
       alert("Something went wrong while generating. Try again.");
     }
-
     button.disabled = false;
     button.textContent = "Generate Cover Letter & Score Resume";
   };
@@ -213,7 +205,6 @@ function processFile(file, jobDescription, tone) {
   if (file.type === "application/pdf") {
     const pdfjsLib = window["pdfjs-dist/build/pdf"];
     pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
-
     const reader = new FileReader();
     reader.onload = function () {
       const typedarray = new Uint8Array(reader.result);
