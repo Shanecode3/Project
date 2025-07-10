@@ -145,3 +145,13 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
+app.post("/register", authenticateFirebase, async (req, res) => {
+  const { firebaseUid, firebaseEmail } = req;
+  try {
+    await userDb.createUserIfNotExists(firebaseUid, firebaseEmail);
+    res.status(200).json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to register user." });
+  }
+});
