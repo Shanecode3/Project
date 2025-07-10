@@ -47,7 +47,6 @@ if (typeof firebase !== "undefined") {
           auth.signOut();
         } else {
           if (msg) msg.innerText = "Login successful!";
-
           userCredential.user.getIdToken().then(idToken => {
             fetch("https://tailormyletter-backend.onrender.com/register", {
               method: "POST",
@@ -172,122 +171,128 @@ function fillDemo() {
   if (toneEl) toneEl.value = "enthusiastic";
 }
 
+// === MAIN GENERATE FUNCTION (NO LOCALSTORAGE, BACKEND CONTROLS TRIAL) ===
 function handleGenerateClick() {
   const jobDescription = document.getElementById("jobDescription");
   const tone = document.getElementById("tone");
   const fileInput = document.getElementById("resumeFile");
+  const button = document.getElementById("generateBtn");
 
   if (!fileInput || !fileInput.files.length || !jobDescription || !jobDescription.value.trim()) {
     alert("Please upload a resume file and paste the job description.");
     return;
   }
+
+  // Handle demo mode as usual (skip backend/DB checks)
   if (isDemoMode) {
     processFile(fileInput.files[0], jobDescription.value, tone ? tone.value : "");
     return;
   }
-  const alreadyUsedFree = localStorage.getItem("usedFree") === "true";
-  if (alreadyUsedFree) {
-    alert("You’ve used your free trial. Please upgrade to generate more cover letters!");
-    window.location.href = "pricing.html";
+
+  // ==== ONLY ALLOW LOGGED-IN AND VERIFIED USERS ====
+  const user = typeof firebase !== "undefined" ? firebase.auth().currentUser : null;
+  if (!user || !user.emailVerified) {
+    alert("You must be signed in and email-verified to use this feature.");
     return;
   }
-  localStorage.setItem("usedFree", "true");
-  processFile(fileInput.files[0], jobDescription.value, tone ? tone.value : "");
-}
 
-function processFile(file, jobDescription, tone) {
-  const button = document.getElementById("generateBtn");
-  if (button) {
-    button.disabled = true;
-    button.textContent = "Generating...";
-  }
-  const loader = document.createElement("div");
-  loader.className = "loader";
-  loader.textContent = "Talking to AI...";
-  const main = document.querySelector("main");
-  if (main) main.appendChild(loader);
-
-  const processResumeAndGenerate = async (resume) => {
-    try {
-      // === FETCH THE FIREBASE TOKEN, ADD IT TO THE HEADER ===
-      let idToken = "";
-      if (typeof firebase !== "undefined" && firebase.auth().currentUser) {
-        idToken = await firebase.auth().currentUser.getIdToken();
+  user.getIdToken().then(idToken => {
+    // Resume file handling
+    const processResumeAndGenerate = async (resume) => {
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Generating...";
       }
+      const loader = document.createElement("div");
+      loader.className = "loader";
+      loader.textContent = "Talking to AI...";
+      const main = document.querySelector("main");
+      if (main) main.appendChild(loader);
 
-      const headers = { "Content-Type": "application/json" };
-      if (idToken) headers["Authorization"] = "Bearer " + idToken;
-
-      const response = await fetch("https://tailormyletter-backend.onrender.com/generate", {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify({ resume, jobDescription, tone }),
-      });
-
-      const data = await response.json();
-      loader.remove();
-      if (data.error) {
-        alert("AI Error: " + data.error);
-        return;
-      }
-      const resultsSection = document.querySelector(".results-section");
-      if (resultsSection) resultsSection.style.display = "block";
-      const coverOut = document.getElementById("coverLetterOutput");
-      if (coverOut) coverOut.value = data.coverLetter || "No letter generated.";
-      const score = data.score || 0;
-      const bar = document.querySelector(".score-bar-fill");
-      if (bar) {
-        bar.style.width = `${score}%`;
-        bar.textContent = `${score}%`;
-      }
-      const feedbackList = document.getElementById("atsFeedback");
-      if (feedbackList) {
-        feedbackList.innerHTML = "";
-        (data.feedback || []).forEach((tip) => {
-          const li = document.createElement("li");
-          li.textContent = tip;
-          feedbackList.appendChild(li);
+      try {
+        const response = await fetch("https://tailormyletter-backend.onrender.com/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + idToken
+          },
+          body: JSON.stringify({ resume, jobDescription: jobDescription.value, tone: tone ? tone.value : "" }),
         });
-      }
-    } catch (err) {
-      loader.remove();
-      alert("Something went wrong while generating. Try again.");
-    }
-    if (button) {
-      button.disabled = false;
-      button.textContent = "Generate Cover Letter & Score Resume";
-    }
-  };
+        const data = await response.json();
+        loader.remove();
 
-  if (file.type === "application/pdf" && window["pdfjs-dist/build/pdf"]) {
-    const pdfjsLib = window["pdfjs-dist/build/pdf"];
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
-    const reader = new FileReader();
-    reader.onload = function () {
-      const typedarray = new Uint8Array(reader.result);
-      pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
-        let textContent = "";
-        const loadPage = (i) => {
-          if (i > pdf.numPages) {
-            processResumeAndGenerate(textContent);
-            return;
-          }
-          pdf.getPage(i).then((page) => {
-            page.getTextContent().then((text) => {
-              textContent += text.items.map((item) => item.str).join(" ") + "\n";
-              loadPage(i + 1);
-            });
+        // === FREE TRIAL ENFORCEMENT ===
+        if (data.error === "Free trial already used. Please subscribe.") {
+          alert("You’ve used your free trial. Please upgrade to generate more cover letters!");
+          window.location.href = "pricing.html";
+          return;
+        }
+        if (data.error) {
+          alert("AI Error: " + data.error);
+          return;
+        }
+
+        // Show results as before
+        const resultsSection = document.querySelector(".results-section");
+        if (resultsSection) resultsSection.style.display = "block";
+        const coverOut = document.getElementById("coverLetterOutput");
+        if (coverOut) coverOut.value = data.coverLetter || "No letter generated.";
+        const score = data.score || 0;
+        const bar = document.querySelector(".score-bar-fill");
+        if (bar) {
+          bar.style.width = `${score}%`;
+          bar.textContent = `${score}%`;
+        }
+        const feedbackList = document.getElementById("atsFeedback");
+        if (feedbackList) {
+          feedbackList.innerHTML = "";
+          (data.feedback || []).forEach((tip) => {
+            const li = document.createElement("li");
+            li.textContent = tip;
+            feedbackList.appendChild(li);
           });
-        };
-        loadPage(1);
-      });
+        }
+      } catch (err) {
+        loader.remove();
+        alert("Something went wrong while generating. Try again.");
+      }
+      if (button) {
+        button.disabled = false;
+        button.textContent = "Generate Cover Letter & Score Resume";
+      }
     };
-    reader.readAsArrayBuffer(file);
-  } else {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      processResumeAndGenerate(e.target.result);
-    };
-    reader.readAsText(file);
-  }
+
+    // === PDF or TXT RESUME ===
+    if (fileInput.files[0].type === "application/pdf" && window["pdfjs-dist/build/pdf"]) {
+      const pdfjsLib = window["pdfjs-dist/build/pdf"];
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
+      const reader = new FileReader();
+      reader.onload = function () {
+        const typedarray = new Uint8Array(reader.result);
+        pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
+          let textContent = "";
+          const loadPage = (i) => {
+            if (i > pdf.numPages) {
+              processResumeAndGenerate(textContent);
+              return;
+            }
+            pdf.getPage(i).then((page) => {
+              page.getTextContent().then((text) => {
+                textContent += text.items.map((item) => item.str).join(" ") + "\n";
+                loadPage(i + 1);
+              });
+            });
+          };
+          loadPage(1);
+        });
+      };
+      reader.readAsArrayBuffer(fileInput.files[0]);
+    } else {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        processResumeAndGenerate(e.target.result);
+      };
+      reader.readAsText(fileInput.files[0]);
+    }
+  });
 }
