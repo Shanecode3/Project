@@ -10,7 +10,7 @@ async function getUserByFirebaseUid(firebaseUid) {
 
 async function createUserIfNotExists(firebaseUid, email) {
   await pool.query(
-    "INSERT INTO users (firebase_uid, email) VALUES ($1, $2) ON CONFLICT (firebase_uid) DO NOTHING",
+    "INSERT INTO users (firebase_uid, email) VALUES ($1, $2) ON CONFLICT (firebase_uid) DO UPDATE SET email=EXCLUDED.email",
     [firebaseUid, email]
   );
 }
@@ -22,8 +22,24 @@ async function setFreeTrialUsed(firebaseUid) {
   );
 }
 
+async function setUserPaid(firebaseUid) {
+  await pool.query(
+    "UPDATE users SET has_paid = TRUE WHERE firebase_uid = $1",
+    [firebaseUid]
+  );
+}
+
+async function setUserUnpaid(firebaseUid) {
+  await pool.query(
+    "UPDATE users SET has_paid = FALSE WHERE firebase_uid = $1",
+    [firebaseUid]
+  );
+}
+
 module.exports = {
   getUserByFirebaseUid,
   createUserIfNotExists,
   setFreeTrialUsed,
+  setUserPaid,
+  setUserUnpaid
 };
