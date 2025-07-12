@@ -21,6 +21,8 @@ app.use(cors({
   credentials: true,
 }));
 
+// Stripe webhook must use raw body
+app.use("/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "/")));
 
@@ -34,36 +36,59 @@ const LOOKUP_KEYS = {
   CAD: "premium_cad",
 };
 
-app.post("/create-checkout-session", async (req, res) => {
+// Create checkout session with user info in metadata
+app.post("/create-checkout-session", authenticateFirebase, async (req, res) => {
   const { currency } = req.body;
+  const { firebaseUid, firebaseEmail } = req;
   const lookupKey = LOOKUP_KEYS[currency] || LOOKUP_KEYS.USD;
 
-  try {
-    const prices = await stripe.prices.list({
-      lookup_keys: [lookupKey],
-      expand: ["data.product"],
-    });
+  const prices = await stripe.prices.list({
+    lookup_keys: [lookupKey],
+    expand: ["data.product"],
+  });
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price: prices.data[0].id,
-          quantity: 1,
-        },
-      ],
-      success_url: "https://tailormyletter.vercel.app/pricing.html",
-      cancel_url: "https://tailormyletter.vercel.app",
-    });
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price: prices.data[0].id,
+        quantity: 1,
+      },
+    ],
+    success_url: "https://tailormyletter.vercel.app/pricing.html",
+    cancel_url: "https://tailormyletter.vercel.app",
+    customer_email: firebaseEmail,
+    metadata: { firebaseUid }
+  });
 
-    res.json({ id: session.id });
-  } catch (err) {
-    console.error("❌ Stripe error:", err.message);
-    res.status(500).json({ error: "Failed to create checkout session." });
-  }
+  res.json({ id: session.id });
 });
 
+// Stripe webhook for payment success
+app.post("/webhook", async (req, res) => {
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const sig = req.headers["stripe-signature"];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const firebaseUid = session.metadata.firebaseUid;
+    if (firebaseUid) {
+      await userDb.setUserPaid(firebaseUid);
+    }
+  }
+
+  res.status(200).json({ received: true });
+});
+
+// Generate endpoint (free or paid logic)
 app.post("/generate", authenticateFirebase, async (req, res) => {
   const { resume, jobDescription, tone } = req.body;
   const { firebaseUid, firebaseEmail } = req;
@@ -72,7 +97,7 @@ app.post("/generate", authenticateFirebase, async (req, res) => {
   const user = await userDb.getUserByFirebaseUid(firebaseUid);
   if (!user) return res.status(500).json({ error: "User creation failed." });
 
-  if (user.has_used_free_trial) {
+  if (user.has_used_free_trial && !user.has_paid) {
     return res.status(403).json({ error: "Free trial already used. Please subscribe." });
   }
 
@@ -133,7 +158,11 @@ ${jobDescription}
       return res.status(500).json({ error: "Invalid JSON returned from AI." });
     }
 
-    await userDb.setFreeTrialUsed(firebaseUid);
+    if (user.has_paid) {
+      await userDb.setUserUnpaid(firebaseUid);
+    } else {
+      await userDb.setFreeTrialUsed(firebaseUid);
+    }
 
     res.json(json);
   } catch (err) {
@@ -141,21 +170,25 @@ ${jobDescription}
   }
 });
 
+// Register user (for completeness)
+app.post("/register", authenticateFirebase, async (req, res) => {
+  const { firebaseUid, firebaseEmail } = req;
+  await userDb.createUserIfNotExists(firebaseUid, firebaseEmail);
+  res.status(200).json({ success: true });
+});
+
+// Optional: status endpoint for frontend
+app.get("/user/status", authenticateFirebase, async (req, res) => {
+  const { firebaseUid } = req;
+  const user = await userDb.getUserByFirebaseUid(firebaseUid);
+  if (!user) return res.status(404).json({ error: "User not found" });
+  res.json({
+    hasUsedFreeTrial: !!user.has_used_free_trial,
+    hasPaid: !!user.has_paid
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
-
-app.post("/register", authenticateFirebase, async (req, res) => {
-  const { firebaseUid, firebaseEmail } = req;
-  console.log("[REGISTER] Called with:", { firebaseUid, firebaseEmail });
-
-  try {
-    await userDb.createUserIfNotExists(firebaseUid, firebaseEmail);
-    res.status(200).json({ success: true });
-  } catch (err) {
-    console.error("[REGISTER] DB Error:", err); // This shows up in Logs tab
-    res.status(500).json({ error: "Failed to register user." });
-  }
-});
-
