@@ -102,18 +102,27 @@ if (typeof firebase !== "undefined") {
       });
   }
 
-  auth.onAuthStateChanged((user) => {
+  // NEW: Hide/show landing content as well
+  function updatePageOnAuth() {
     const authSection = document.getElementById("auth-section");
     const appSection = document.getElementById("app-section");
-    if (authSection && appSection) {
+    const landingMain = document.getElementById("landing-main-content");
+    if (authSection && appSection && landingMain) {
+      const user = auth.currentUser;
       if (user && user.emailVerified) {
         authSection.style.display = "none";
         appSection.style.display = "block";
+        landingMain.style.display = "none";
       } else {
         authSection.style.display = "block";
         appSection.style.display = "none";
+        landingMain.style.display = "";
       }
     }
+  }
+
+  auth.onAuthStateChanged(() => {
+    updatePageOnAuth();
   });
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -127,6 +136,8 @@ if (typeof firebase !== "undefined") {
     if (resendBtn) resendBtn.onclick = sendVerification;
     if (signoutBtn) signoutBtn.onclick = signOut;
     if (forgotLink) forgotLink.onclick = function(e){ e.preventDefault(); forgotPassword(); return false; };
+
+    updatePageOnAuth(); // Ensure correct state on first load
   });
 }
 
@@ -380,23 +391,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
-function hideLandingIfLoggedIn() {
-  const user = typeof firebase !== "undefined" ? firebase.auth().currentUser : null;
-  const landingSection = document.getElementById("landing-section");
-  const authSection = document.getElementById("auth-section");
-  const appSection = document.getElementById("app-section");
-  if (user && user.emailVerified) {
-    if (landingSection) landingSection.style.display = "none";
-    if (authSection) authSection.style.display = "none";
-    if (appSection) appSection.style.display = "block";
-  } else {
-    if (landingSection) landingSection.style.display = "";
-    if (authSection) authSection.style.display = "";
-    if (appSection) appSection.style.display = "none";
-  }
-}
-
-if (typeof firebase !== "undefined") {
-  firebase.auth().onAuthStateChanged(hideLandingIfLoggedIn);
-}
