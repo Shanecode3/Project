@@ -24,52 +24,56 @@
     </div>
   </nav>
 
-  <section id="landing-section">
-    <div class="landing-hero">
-      <h1>AI-Powered Cover Letters, Instantly</h1>
-      <p class="landing-tagline">
-        Upload your resume, paste a job description, pick your tone, and generate a tailored cover letter with ATS match score.<br>
-        <strong>Try your first cover letter free.</strong>
-      </p>
-      <button class="cta-btn" onclick="document.getElementById('auth-section').scrollIntoView({behavior: 'smooth'});">
-        Try Free Now
-      </button>
-      <ul class="how-it-works">
-        <li><b>1.</b> Upload your Resume</li>
-        <li><b>2.</b> Paste the Job Description</li>
-        <li><b>3.</b> Choose your Tone</li>
-        <li><b>4.</b> Click “Generate” – Done!</li>
-      </ul>
-      <div class="scroll-arrow" id="scroll-to-auth"></div>
-    </div>
-  </section>
+  <!-- START: Everything to be hidden when logged in -->
+  <div id="landing-main-content">
+    <section id="landing-section">
+      <div class="landing-hero">
+        <h1>AI-Powered Cover Letters, Instantly</h1>
+        <p class="landing-tagline">
+          Upload your resume, paste a job description, pick your tone, and generate a tailored cover letter with ATS match score.<br>
+          <strong>Try your first cover letter free.</strong>
+        </p>
+        <button class="cta-btn" onclick="document.getElementById('auth-section').scrollIntoView({behavior: 'smooth'});">
+          Try Free Now
+        </button>
+        <ul class="how-it-works">
+          <li><b>1.</b> Upload your Resume</li>
+          <li><b>2.</b> Paste the Job Description</li>
+          <li><b>3.</b> Choose your Tone</li>
+          <li><b>4.</b> Click “Generate” – Done!</li>
+        </ul>
+        <div class="scroll-arrow" id="scroll-to-auth"></div>
+      </div>
+    </section>
 
-  <div class="usp-badges">
-    <span class="usp-badge free">🎁 First Cover Letter Free</span>
-    <span class="usp-badge cheap">💸 Pay-Per-Use – Only ₹79 / $2.49 CAD / $2.99 USD</span>
-    <span class="usp-badge privacy">🔒 No Resume Stored, Privacy-First</span>
+    <div class="usp-badges">
+      <span class="usp-badge free">🎁 First Cover Letter Free</span>
+      <span class="usp-badge cheap">💸 Pay-Per-Use – Only ₹79 / $2.49 CAD / $2.99 USD</span>
+      <span class="usp-badge privacy">🔒 No Resume Stored, Privacy-First</span>
+    </div>
+
+    <section class="testimonials-section">
+      <h2>What Job Seekers Say</h2>
+      <div class="testimonials-cards">
+        <div class="testimonial-card">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="testimonial user" class="testimonial-avatar">
+          <p class="testimonial-text">“I landed two interviews in a week using TailorMyLetter. The cover letters feel personal and took me less than 2 minutes!”</p>
+          <div class="testimonial-name">Aman S., Final Year Student</div>
+        </div>
+        <div class="testimonial-card">
+          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="testimonial user" class="testimonial-avatar">
+          <p class="testimonial-text">“Love the pricing and the privacy. No subscriptions, no hidden fees. Highly recommended for freshers.”</p>
+          <div class="testimonial-name">Emily D., Software Grad</div>
+        </div>
+        <div class="testimonial-card">
+          <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="testimonial user" class="testimonial-avatar">
+          <p class="testimonial-text">“The ATS feedback helped me boost my resume score instantly. Super easy and way better than other expensive tools.”</p>
+          <div class="testimonial-name">Arjun K., Early Career Analyst</div>
+        </div>
+      </div>
+    </section>
   </div>
-
-  <section class="testimonials-section">
-    <h2>What Job Seekers Say</h2>
-    <div class="testimonials-cards">
-      <div class="testimonial-card">
-        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="testimonial user" class="testimonial-avatar">
-        <p class="testimonial-text">“I landed two interviews in a week using TailorMyLetter. The cover letters feel personal and took me less than 2 minutes!”</p>
-        <div class="testimonial-name">Aman S., Final Year Student</div>
-      </div>
-      <div class="testimonial-card">
-        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="testimonial user" class="testimonial-avatar">
-        <p class="testimonial-text">“Love the pricing and the privacy. No subscriptions, no hidden fees. Highly recommended for freshers.”</p>
-        <div class="testimonial-name">Emily D., Software Grad</div>
-      </div>
-      <div class="testimonial-card">
-        <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="testimonial user" class="testimonial-avatar">
-        <p class="testimonial-text">“The ATS feedback helped me boost my resume score instantly. Super easy and way better than other expensive tools.”</p>
-        <div class="testimonial-name">Arjun K., Early Career Analyst</div>
-      </div>
-    </div>
-  </section>
+  <!-- END: Everything to be hidden when logged in -->
 
   <div id="auth-section">
     <h3>Sign Up / Login</h3>
