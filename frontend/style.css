@@ -101,6 +101,17 @@ main.form-section {
   letter-spacing: 0.01em;
 }
 
+.trust-badge {
+  font-size: 0.98rem;
+  color: #3177c4;
+  background: #e9f6fd;
+  border-radius: 7px;
+  padding: 0.32em 1em;
+  margin-bottom: 1.1em;
+  display: inline-block;
+  box-shadow: 0 2px 10px rgba(30,150,220,0.07);
+}
+
 #auth-section input[type="email"],
 #auth-section input[type="password"] {
   width: 94%;
@@ -295,7 +306,6 @@ footer {
 /* Landing Page Section */
 #landing-section {
   min-height: 92vh;
-  /* Transparent background so body gradient shows through */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -324,6 +334,25 @@ footer {
   font-size: 1.18rem;
   margin-bottom: 2.0rem;
   color: #35506d;
+}
+
+/* CTA Button in Hero */
+.cta-btn {
+  margin-top: 1.3rem;
+  font-size: 1.18rem;
+  font-weight: 700;
+  padding: 0.88em 2.2em;
+  border-radius: 9px;
+  background: linear-gradient(90deg, #007bff 60%, #33beff 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 32px 0 rgba(20, 80, 180, 0.09);
+  cursor: pointer;
+  transition: background 0.22s, transform 0.15s;
+}
+.cta-btn:hover {
+  background: linear-gradient(90deg, #0056b3 60%, #33aaff 100%);
+  transform: translateY(-2px) scale(1.04);
 }
 
 .how-it-works {
@@ -368,22 +397,103 @@ footer {
 }
 .scroll-arrow:after {
   top: 13px;
-  left: 8px;
+  left: 7px;
   width: 18px; height: 18px;
   border-bottom: 4px solid var(--accent);
   border-right: 4px solid var(--accent);
   transform: rotate(45deg);
 }
 
-@keyframes bounceDown {
-  0%, 100% { transform: translateY(0); }
-  30% { transform: translateY(10px); }
-  50% { transform: translateY(18px);}
+/* USP Badges */
+.usp-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em 1em;
+  justify-content: center;
+  align-items: center;
+  margin: 1.2rem auto 2rem auto;
+  max-width: 720px;
+}
+
+.usp-badge {
+  display: inline-block;
+  background: #eef6fe;
+  color: #2263ab;
+  border-radius: 2rem;
+  padding: 0.42em 1.15em;
+  font-size: 1.07rem;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(40,70,180,0.06);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.3em;
+}
+.usp-badge.free { background: #e6faea; color: #259a5a; }
+.usp-badge.cheap { background: #fffae7; color: #c6901b;}
+.usp-badge.privacy { background: #eef6fe; color: #2263ab; }
+
+/* Testimonials */
+.testimonials-section {
+  max-width: 880px;
+  margin: 0 auto 2.3rem auto;
+  text-align: center;
+  animation: fadeInSlide 0.9s;
+}
+.testimonials-section h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1.1rem;
+  color: var(--accent);
+  letter-spacing: 0.01em;
+}
+.testimonials-cards {
+  display: flex;
+  gap: 1.3rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.testimonial-card {
+  background: rgba(255,255,255,0.9);
+  border-radius: 19px;
+  box-shadow: 0 4px 28px rgba(60,70,130,0.13);
+  max-width: 290px;
+  padding: 1.2rem 1.1rem 1.1rem 1.1rem;
+  margin-bottom: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1.3px solid #e2e9f2;
+}
+.testimonial-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+  border: 2.2px solid #aad6ff;
+  object-fit: cover;
+}
+.testimonial-text {
+  font-size: 1.04rem;
+  color: #283c4a;
+  margin-bottom: 0.78em;
+  font-style: italic;
+}
+.testimonial-name {
+  font-size: 1.01rem;
+  color: #315884;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Responsive for Testimonials & Badges */
+@media (max-width: 900px) {
+  .testimonials-cards { flex-direction: column; align-items: center; }
+  .usp-badges { flex-direction: column; }
 }
 
 @media (max-width: 650px) {
   .landing-hero h1 { font-size: 1.38rem; }
   .landing-hero { padding: 1.3rem 0.1rem 1.1rem 0.1rem; }
+  .cta-btn { font-size: 1rem; padding: 0.75em 1.3em; }
 }
 
 /* Animations */
@@ -396,4 +506,10 @@ footer {
 @keyframes fadeInSlide {
   0% { opacity: 0; transform: translateY(-30px); }
   100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(10px); }
+  50% { transform: translateY(18px);}
 }
