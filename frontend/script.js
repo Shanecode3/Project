@@ -142,7 +142,7 @@ if (typeof firebase !== "undefined") {
 }
 
 // === STRIPE (for pricing) ===
-const stripe = (typeof Stripe !== "undefined") ? Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0") : null;
+const stripe = (typeof Stripe !== "undefined") ? Stripe("pk_test_51RggwVGaDogLlv84d1LO8wN5FJwkZ9lP7ZvujTesonYCCEHmYCDoC9girn7PGUVvRqNpCZ6KUR53pT0IPgtCS2gJ00mHLMIqmY") : null;
 
 // === GENERATE ===
 let isDemoMode = false;
