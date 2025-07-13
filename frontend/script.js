@@ -144,52 +144,6 @@ if (typeof firebase !== "undefined") {
 // === STRIPE (for pricing) ===
 const stripe = (typeof Stripe !== "undefined") ? Stripe("pk_test_51RggwVGaDogLlv84d1LO8wN5FJwkZ9lP7ZvujTesonYCCEHmYCDoC9girn7PGUVvRqNpCZ6KUR53pT0IPgtCS2gJ00mHLMIqmY") : null;
 
-// === PRICING PAGE STRIPE PAYMENT HANDLER ===
-document.addEventListener("DOMContentLoaded", () => {
-  const payBtn = document.getElementById("payNowBtn");
-  const currencySelect = document.getElementById("currencySelector");
-
-  if (payBtn && currencySelect) {
-    payBtn.addEventListener("click", async () => {
-      const user = firebase.auth().currentUser;
-      if (!user) {
-        alert("Please log in or sign up to pay and generate again!");
-        return;
-      }
-      if (!user.emailVerified) {
-        alert("Please verify your email before purchasing.");
-        return;
-      }
-      const idToken = await user.getIdToken();
-      let currency = currencySelect.value || "USD";
-      payBtn.disabled = true;
-      payBtn.textContent = "Processing...";
-
-      try {
-        const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + idToken
-          },
-          body: JSON.stringify({ currency })
-        });
-        const data = await res.json();
-        if (data.id) {
-          await stripe.redirectToCheckout({ sessionId: data.id });
-        } else {
-          alert("Payment failed: " + (data.error || "No session ID."));
-        }
-      } catch (e) {
-        alert("Payment failed. " + e.message);
-      } finally {
-        payBtn.disabled = false;
-        payBtn.textContent = "Pay & Generate Again";
-      }
-    });
-  }
-});
-
 // === GENERATE ===
 let isDemoMode = false;
 
@@ -352,16 +306,37 @@ function processRealFile(file, jobDescription, tone, idToken, button) {
         },
         body: JSON.stringify({ resume, jobDescription, tone }),
       });
-      const data = await response.json();
-      loader.remove();
 
-      if (data.error === "Free trial already used. Please subscribe.") {
-        alert("You’ve used your free trial. Please upgrade to generate more cover letters!");
-        window.location.href = "pricing.html";
+      let data;
+      if (!response.ok) {
+        try {
+          data = await response.json();
+        } catch (e) {
+          data = { error: response.statusText || "Error" };
+        }
+        loader.remove();
+        if (data.error && data.error.includes("Free trial already used")) {
+          alert("You’ve used your free trial. Please upgrade to generate more cover letters!");
+          window.location.href = "pricing.html";
+        } else {
+          alert("AI Error: " + (data.error || "Unknown error"));
+        }
+        if (button) {
+          button.disabled = false;
+          button.textContent = "Generate Cover Letter & Score Resume";
+        }
         return;
       }
+
+      data = await response.json();
+      loader.remove();
+
       if (data.error) {
         alert("AI Error: " + data.error);
+        if (button) {
+          button.disabled = false;
+          button.textContent = "Generate Cover Letter & Score Resume";
+        }
         return;
       }
       const resultsSection = document.querySelector(".results-section");
@@ -386,6 +361,10 @@ function processRealFile(file, jobDescription, tone, idToken, button) {
     } catch (err) {
       loader.remove();
       alert("Something went wrong while generating. Try again.");
+      if (button) {
+        button.disabled = false;
+        button.textContent = "Generate Cover Letter & Score Resume";
+      }
     }
     if (button) {
       button.disabled = false;
@@ -433,6 +412,48 @@ document.addEventListener("DOMContentLoaded", () => {
       const authSec = document.getElementById("auth-section");
       if (authSec) {
         authSec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+
+  // --- PRICING PAGE STRIPE PAYMENT ---
+  const payBtn = document.getElementById("payNowBtn");
+  const currencySelect = document.getElementById("currencySelector");
+
+  if (payBtn && stripe) {
+    payBtn.addEventListener("click", async () => {
+      let currency = getCurrency();
+      if (currencySelect && currencySelect.value) {
+        currency = currencySelect.value;
+      }
+
+      // Require user login for payment
+      if (typeof firebase !== "undefined") {
+        const user = firebase.auth().currentUser;
+        if (!user || !user.emailVerified) {
+          alert("Please sign in and verify your email to pay & unlock.");
+          return;
+        }
+        const idToken = await user.getIdToken();
+
+        try {
+          const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + idToken
+            },
+            body: JSON.stringify({ currency }),
+          });
+          const session = await res.json();
+          if (session.id) {
+            await stripe.redirectToCheckout({ sessionId: session.id });
+          } else {
+            alert("Payment failed. No session ID.");
+          }
+        } catch (err) {
+          alert("Checkout failed. Try again later.");
+        }
       }
     });
   }
