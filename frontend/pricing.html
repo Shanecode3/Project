@@ -63,44 +63,63 @@
   <footer>
     <p>© 2025 TailorMyLetter. Built with AI ❤️</p>
   </footer>
-  <script>
+<script>
+  // Make sure Firebase is already initialized above this script!
 
-    const payBtn = document.getElementById("payNowBtn");
+  const payBtn = document.getElementById("payNowBtn");
 
-    function getCurrencyByLocale() {
-      const region = Intl.DateTimeFormat().resolvedOptions().locale;
-      if (region.includes("IN")) return "INR";
-      if (region.includes("CA")) return "CAD";
-      return "USD";
+  function getCurrencyByLocale() {
+    const region = Intl.DateTimeFormat().resolvedOptions().locale;
+    if (region.includes("IN")) return "INR";
+    if (region.includes("CA")) return "CAD";
+    return "USD";
+  }
+
+  payBtn.addEventListener("click", async () => {
+    // --- Auth Check ---
+    if (!firebase.auth().currentUser) {
+      alert("Please sign in to purchase.");
+      window.location.href = "index.html";
+      return;
+    }
+    if (!firebase.auth().currentUser.emailVerified) {
+      alert("Please verify your email before purchasing.");
+      return;
     }
 
-    payBtn.addEventListener("click", async () => {
-      let currency = getCurrencyByLocale();
-      const manualSelect = document.getElementById("currencySelector");
-      if (manualSelect && manualSelect.value) {
-        currency = manualSelect.value;
+    let currency = getCurrencyByLocale();
+    const manualSelect = document.getElementById("currencySelector");
+    if (manualSelect && manualSelect.value) {
+      currency = manualSelect.value;
+    }
+
+    try {
+      // Get ID Token for Authorization
+      const idToken = await firebase.auth().currentUser.getIdToken();
+
+      const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + idToken // REQUIRED!
+        },
+        body: JSON.stringify({ currency }),
+      });
+
+      const session = await res.json();
+
+      if (session.id) {
+        const stripeInstance = Stripe("pk_test_51RggwVGaDogLlv84d1LO8wN5FJwkZ9lP7ZvujTesonYCCEHmYCDoC9girn7PGUVvRqNpCZ6KUR53pT0IPgtCS2gJ00mHLMIqmY"); // Use your Stripe publishable key (test for test mode, live for production)
+        await stripeInstance.redirectToCheckout({ sessionId: session.id });
+      } else {
+        alert("Payment failed. No session ID.");
       }
+    } catch (err) {
+      console.error("Stripe checkout error:", err);
+      alert("Checkout failed. Try again later.");
+    }
+  });
+</script>
 
-
-      try {
-        const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ currency }),
-        });
-
-        const session = await res.json();
-
-        if (session.id) {
-          await stripe.redirectToCheckout({ sessionId: session.id });
-        } else {
-          alert("Payment failed. No session ID.");
-        }
-      } catch (err) {
-        console.error("Stripe checkout error:", err);
-        alert("Checkout failed. Try again later.");
-      }
-    });
-  </script>
 </body>
 </html>
