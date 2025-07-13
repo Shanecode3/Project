@@ -144,6 +144,52 @@ if (typeof firebase !== "undefined") {
 // === STRIPE (for pricing) ===
 const stripe = (typeof Stripe !== "undefined") ? Stripe("pk_test_51RggwVGaDogLlv84d1LO8wN5FJwkZ9lP7ZvujTesonYCCEHmYCDoC9girn7PGUVvRqNpCZ6KUR53pT0IPgtCS2gJ00mHLMIqmY") : null;
 
+// === PRICING PAGE STRIPE PAYMENT HANDLER ===
+document.addEventListener("DOMContentLoaded", () => {
+  const payBtn = document.getElementById("payNowBtn");
+  const currencySelect = document.getElementById("currencySelector");
+
+  if (payBtn && currencySelect) {
+    payBtn.addEventListener("click", async () => {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        alert("Please log in or sign up to pay and generate again!");
+        return;
+      }
+      if (!user.emailVerified) {
+        alert("Please verify your email before purchasing.");
+        return;
+      }
+      const idToken = await user.getIdToken();
+      let currency = currencySelect.value || "USD";
+      payBtn.disabled = true;
+      payBtn.textContent = "Processing...";
+
+      try {
+        const res = await fetch("https://tailormyletter-backend.onrender.com/create-checkout-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + idToken
+          },
+          body: JSON.stringify({ currency })
+        });
+        const data = await res.json();
+        if (data.id) {
+          await stripe.redirectToCheckout({ sessionId: data.id });
+        } else {
+          alert("Payment failed: " + (data.error || "No session ID."));
+        }
+      } catch (e) {
+        alert("Payment failed. " + e.message);
+      } finally {
+        payBtn.disabled = false;
+        payBtn.textContent = "Pay & Generate Again";
+      }
+    });
+  }
+});
+
 // === GENERATE ===
 let isDemoMode = false;
 
