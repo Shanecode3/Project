@@ -31,9 +31,9 @@ app.get("/", (req, res) => {
 });
 
 const LOOKUP_KEYS = {
-  INR: "premium-inr",
-  USD: "premium-usd",
-  CAD: "premium-cad",
+  INR: "premium_inr",
+  USD: "premium_usd",
+  CAD: "premium_cad",
 };
 
 // Create checkout session with user info in metadata
