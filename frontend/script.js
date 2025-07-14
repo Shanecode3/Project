@@ -458,3 +458,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+function showToast(msg = "Payment successful! You can now generate your cover letter.") {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3500);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("paid") === "1") {
+    showToast();
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+});
+
