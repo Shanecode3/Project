@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 });
 
 const LOOKUP_KEYS = {
-  INR: "premium_inr",
+  INR: "premium-inr",
   USD: "premium-usd",
   CAD: "premium-cad",
 };
