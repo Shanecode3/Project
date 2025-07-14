@@ -56,7 +56,7 @@ app.post("/create-checkout-session", authenticateFirebase, async (req, res) => {
         quantity: 1,
       },
     ],
-    success_url: "https://tailormyletter.vercel.app/pricing.html",
+    success_url: "https://tailormyletter.vercel.app/index.html",
     cancel_url: "https://tailormyletter.vercel.app",
     customer_email: firebaseEmail,
     metadata: { firebaseUid }
