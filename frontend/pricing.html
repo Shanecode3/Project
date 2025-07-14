@@ -109,7 +109,7 @@
       const session = await res.json();
 
       if (session.id) {
-        const stripeInstance = Stripe("pk_test_51RggwVGaDogLlv84d1LO8wN5FJwkZ9lP7ZvujTesonYCCEHmYCDoC9girn7PGUVvRqNpCZ6KUR53pT0IPgtCS2gJ00mHLMIqmY"); // Use your Stripe publishable key (test for test mode, live for production)
+        const stripeInstance = Stripe("pk_live_51RggwVGaDogLlv84eCRGvr7Xl8ocVtyftXCUm4EQZfSM9RNlKl8P8ui7LHFhcydE1YNQu5vKSeMsC0tizEJvXHkI0001FKpjK0"); // Use your Stripe publishable key (test for test mode, live for production)
         await stripeInstance.redirectToCheckout({ sessionId: session.id });
       } else {
         alert("Payment failed. No session ID.");
