@@ -4,7 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="google-site-verification" content="AGWwN-gnHh4pFD2-x_TWFdkdmwkw9PuuAkFy_vWe1ts" />
-  <title>TailorMyLetter – Generate Cover Letter</title>
+  <title>TailorMyLetter – Free AI Cover Letter Generator (ATS-Friendly, No Resume Stored)</title>
+  <meta name="description" content="Instantly create tailored, ATS-friendly cover letters with AI. Upload your resume, paste the job description, and get a unique letter and feedback. First cover letter free. No resume is ever stored.">
+  <meta property="og:title" content="TailorMyLetter – Free AI Cover Letter Generator" />
+  <meta property="og:description" content="Generate a personalized, ATS-matched cover letter in seconds. Free for your first use. Privacy-first, no resume storage." />
+  <meta property="og:image" content="https://tailormyletter.vercel.app/og-banner.png" />
+  <meta property="og:url" content="https://tailormyletter.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta name="robots" content="index, follow" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -37,37 +44,49 @@
         <button class="cta-btn" onclick="document.getElementById('auth-section').scrollIntoView({behavior: 'smooth'});">
           Try Free Now
         </button>
-        <ul class="how-it-works">
-          <li><b>1.</b> Upload your Resume</li>
-          <li><b>2.</b> Paste the Job Description</li>
-          <li><b>3.</b> Choose your Tone</li>
-          <li><b>4.</b> Click “Generate” – Done!</li>
-        </ul>
-        <div class="scroll-arrow" id="scroll-to-auth"></div>
       </div>
     </section>
 
-    <div class="usp-badges">
+    <section class="privacy-promise" style="margin: 2rem auto 1.5rem auto; max-width: 560px; background: #f9fcff; border-radius: 1.2rem; box-shadow: 0 1px 14px rgba(0,0,0,0.04); padding: 1.1rem 2rem 1.1rem 2rem;">
+      <h2 style="font-size: 1.13rem; font-weight: 700; margin-bottom: 0.7rem;">Privacy Promise</h2>
+      <ul style="padding-left: 1.3rem; font-size: 1.05rem;">
+        <li>No resume is ever stored on our servers.</li>
+        <li>Payment is always secure (powered by Stripe).</li>
+        <li>No spam, no tricks – just results. <b>We may show ads to keep your first cover letter free.</b></li>
+      </ul>
+    </section>
+
+    <section class="usp-badges" style="text-align:center;">
       <span class="usp-badge free">🎁 First Cover Letter Free</span>
       <span class="usp-badge cheap">💸 Pay-Per-Use – Only ₹79 / $2.49 CAD / $2.99 USD</span>
-      <span class="usp-badge privacy">🔒 No Resume Stored, Privacy-First</span>
-    </div>
+      <span class="usp-badge privacy">🔒 Privacy-First, No Resume Stored</span>
+    </section>
 
-    <section class="testimonials-section">
+    <section class="how-it-works-section" style="margin:2.1rem auto 1.5rem auto;max-width:510px;">
+      <h2 style="font-size: 1.2rem; font-weight:700; margin-bottom:0.75rem;">How it Works</h2>
+      <ol class="how-it-works" style="font-size:1.05rem; padding-left:1.3rem;">
+        <li><b>1.</b> Upload your Resume (PDF or TXT)</li>
+        <li><b>2.</b> Paste the Job Description</li>
+        <li><b>3.</b> Choose your Tone</li>
+        <li><b>4.</b> Click “Generate” – Done!</li>
+      </ol>
+    </section>
+
+    <section class="testimonials-section" style="margin:2.2rem auto 1.8rem auto;">
       <h2>What Job Seekers Say</h2>
-      <div class="testimonials-cards">
-        <div class="testimonial-card">
-          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="testimonial user" class="testimonial-avatar">
+      <div class="testimonials-cards" style="display:flex;gap:1.3rem;justify-content:center;flex-wrap:wrap;">
+        <div class="testimonial-card" style="max-width:290px;">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Aman S, testimonial user, final year student" class="testimonial-avatar" width="60" height="60" style="border-radius:50%;"/>
           <p class="testimonial-text">“I landed two interviews in a week using TailorMyLetter. The cover letters feel personal and took me less than 2 minutes!”</p>
           <div class="testimonial-name">Aman S., Final Year Student</div>
         </div>
-        <div class="testimonial-card">
-          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="testimonial user" class="testimonial-avatar">
+        <div class="testimonial-card" style="max-width:290px;">
+          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emily D, testimonial user, software grad" class="testimonial-avatar" width="60" height="60" style="border-radius:50%;"/>
           <p class="testimonial-text">“Love the pricing and the privacy. No subscriptions, no hidden fees. Highly recommended for freshers.”</p>
           <div class="testimonial-name">Emily D., Software Grad</div>
         </div>
-        <div class="testimonial-card">
-          <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="testimonial user" class="testimonial-avatar">
+        <div class="testimonial-card" style="max-width:290px;">
+          <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Arjun K, testimonial user, analyst" class="testimonial-avatar" width="60" height="60" style="border-radius:50%;"/>
           <p class="testimonial-text">“The ATS feedback helped me boost my resume score instantly. Super easy and way better than other expensive tools.”</p>
           <div class="testimonial-name">Arjun K., Early Career Analyst</div>
         </div>
