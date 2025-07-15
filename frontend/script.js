@@ -24,7 +24,7 @@ if (typeof firebase !== "undefined") {
         userCredential.user.sendEmailVerification()
           .then(() => {
             const msg = document.getElementById("auth-message");
-            if (msg) msg.innerText = "Verification email sent! Please check your INBOX (and SPAM/PROMOTIONS tab).";
+            if (msg) msg.innerText = "Verification email sent! Please check your INBOX and SPAM/PROMOTIONS tab.";
           });
       })
       .catch(err => {
@@ -43,7 +43,7 @@ if (typeof firebase !== "undefined") {
       .then(userCredential => {
         const msg = document.getElementById("auth-message");
         if (!userCredential.user.emailVerified) {
-          if (msg) msg.innerText = "Please verify your email first (check your inbox).";
+          if (msg) msg.innerText = "Please verify your email first (check your INBOX and SPAM/PROMOTIONS tab).";
           auth.signOut();
         } else {
           if (msg) msg.innerText = "Login successful!";
@@ -70,7 +70,7 @@ if (typeof firebase !== "undefined") {
     const msg = document.getElementById("auth-message");
     if (user && !user.emailVerified) {
       user.sendEmailVerification().then(() => {
-        if (msg) msg.innerText = "Verification email sent!";
+        if (msg) msg.innerText = "Verification email sent! Check your INBOX and SPAM/PROMOTIONS tab.";
       });
     } else {
       if (msg) msg.innerText = "Log in first or already verified.";
@@ -95,7 +95,7 @@ if (typeof firebase !== "undefined") {
     }
     auth.sendPasswordResetEmail(email)
       .then(() => {
-        if (msg) msg.innerText = "Password reset email sent! Please check your inbox.";
+        if (msg) msg.innerText = "Password reset email sent! Please check your INBOX and SPAM/PROMOTIONS tab.";
       })
       .catch((error) => {
         if (msg) msg.innerText = error.message;
