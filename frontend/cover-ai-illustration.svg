@@ -1,0 +1,24 @@
+<!-- cover-ai-illustration.svg -->
+<svg width="330" height="260" viewBox="0 0 330 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="40" width="298" height="178" rx="16" fill="#EEF4FF"/>
+  <rect x="44" y="70" width="85" height="16" rx="4" fill="#B2D1FF"/>
+  <rect x="44" y="97" width="242" height="12" rx="4" fill="#D3E4FF"/>
+  <rect x="44" y="117" width="185" height="12" rx="4" fill="#D3E4FF"/>
+  <rect x="44" y="137" width="120" height="12" rx="4" fill="#D3E4FF"/>
+  <rect x="44" y="157" width="90" height="12" rx="4" fill="#D3E4FF"/>
+  <rect x="44" y="177" width="210" height="12" rx="4" fill="#D3E4FF"/>
+  <rect x="44" y="197" width="110" height="12" rx="4" fill="#D3E4FF"/>
+  <circle cx="264" cy="88" r="18" fill="#72A3FF"/>
+  <path d="M259 89l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="195" y="65" width="90" height="10" rx="4" fill="#FFD25E"/>
+  <rect x="195" y="185" width="68" height="10" rx="4" fill="#72A3FF"/>
+  <ellipse cx="165" cy="240" rx="116" ry="12" fill="#F2F7FF"/>
+  <g>
+    <rect x="130" y="18" width="70" height="32" rx="8" fill="#fff"/>
+    <rect x="139" y="28" width="52" height="8" rx="3" fill="#B2D1FF"/>
+    <rect x="139" y="38" width="34" height="6" rx="3" fill="#E5ECF9"/>
+  </g>
+  <rect x="105" y="209" width="122" height="16" rx="8" fill="#FFD25E"/>
+  <rect x="130" y="215" width="72" height="4" rx="2" fill="#fff"/>
+  <text x="80" y="120" font-size="20" font-family="Inter, Arial, sans-serif" fill="#4267B2" font-weight="bold">AI Tailored Letter</text>
+</svg>
