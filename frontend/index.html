@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="google-site-verification" content="AGWwN-gnHh4pFD2-x_TWFdkdmwkw9PuuAkFy_vWe1ts" />
   <title>TailorMyLetter – Free AI Cover Letter Generator (ATS-Friendly, No Resume Stored)</title>
-  <meta name="description" content="Instantly create tailored, ATS-friendly cover letters with AI. Upload your resume, paste the job description, and get a unique letter and feedback. First cover letter free. No resume is ever stored.">
+  <meta name="description" content="Instantly create tailored, ATS-friendly cover letters with AI. Upload your resume as PDF, paste the job description, and get a unique letter and feedback. First cover letter free. No resume is ever stored.">
   <meta property="og:title" content="TailorMyLetter – Free AI Cover Letter Generator" />
   <meta property="og:description" content="Generate a personalized, ATS-matched cover letter in seconds. Free for your first use. Privacy-first, no resume storage." />
   <meta property="og:image" content="https://tailormyletter.vercel.app/og-banner.png" />
@@ -38,11 +38,11 @@
       <div class="landing-hero">
         <h1>AI-Powered Cover Letters, Instantly</h1>
         <p class="landing-tagline">
-          Upload your resume, paste a job description, pick your tone, and generate a tailored cover letter with ATS match score.<br>
-          <strong>Try your first cover letter free.</strong>
+          Upload your resume (PDF only), paste a job description, pick your tone, and generate a tailored cover letter with ATS match score.<br>
+          <strong>Try your first cover letter free – account required for all features.</strong>
         </p>
         <button class="cta-btn" onclick="document.getElementById('auth-section').scrollIntoView({behavior: 'smooth'});">
-          Try Free Now
+          Sign Up Free
         </button>
       </div>
     </section>
@@ -67,7 +67,7 @@
       <ul style="font-size:1.05rem;padding-left:1.3rem;">
         <li>Get an ATS-matched, job-ready cover letter in seconds</li>
         <li>Feedback on your resume from AI</li>
-        <li>No account needed for demo mode</li>
+        <li>Account required for all features and demo mode</li>
         <li>Privacy-first: resumes are never stored</li>
         <li>Pay-per-use, no subscriptions</li>
         <li>Works for students, grads, and professionals worldwide</li>
@@ -77,7 +77,7 @@
     <section class="how-it-works-section" style="margin:2.1rem auto 1.5rem auto;max-width:510px;">
       <h2 style="font-size: 1.2rem; font-weight:700; margin-bottom:0.75rem;">How it Works</h2>
       <ol class="how-it-works" style="font-size:1.05rem; padding-left:1.3rem;">
-        <li><b>1.</b> Upload your Resume (PDF or TXT)</li>
+        <li><b>1.</b> Upload your Resume (PDF only)</li>
         <li><b>2.</b> Paste the Job Description</li>
         <li><b>3.</b> Choose your Tone</li>
         <li><b>4.</b> Click “Generate” – Done!</li>
@@ -132,8 +132,8 @@
     </div>
     <h2>Generate Your Perfect Cover Letter</h2>
 
-    <label for="resumeFile">Upload Resume (PDF or TXT)</label>
-    <input type="file" id="resumeFile" />
+    <label for="resumeFile">Upload Resume (PDF only)</label>
+    <input type="file" id="resumeFile" accept="application/pdf" />
 
     <label for="jobDescription">Paste Job Description</label>
     <textarea id="jobDescription" rows="4" placeholder="Enter the job description..."></textarea>
