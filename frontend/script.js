@@ -24,7 +24,7 @@ if (typeof firebase !== "undefined") {
         userCredential.user.sendEmailVerification()
           .then(() => {
             const msg = document.getElementById("auth-message");
-            if (msg) msg.innerText = "Verification email sent! Please check your inbox (and spam/promotions tab).";
+            if (msg) msg.innerText = "Verification email sent! Please check your INBOX (and SPAM/PROMOTIONS tab).";
           });
       })
       .catch(err => {
