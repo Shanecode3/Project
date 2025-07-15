@@ -32,24 +32,38 @@
     </div>
   </nav>
 
-  <!-- START: Everything to be hidden when logged in -->
+  <!-- Everything to be hidden when logged in -->
   <div id="landing-main-content">
     <section id="landing-section">
-      <div class="landing-hero">
-        <h1>AI-Powered Cover Letters, Instantly</h1>
-        <p class="landing-tagline">
-          Upload your resume (PDF only), paste a job description, pick your tone, and generate a tailored cover letter with ATS match score.<br>
-          <strong>Try your first cover letter free – account required for all features.</strong>
-        </p>
-        <button class="cta-btn" onclick="document.getElementById('auth-section').scrollIntoView({behavior: 'smooth'});">
-          Sign Up Free
-        </button>
+      <div class="landing-hero" style="display:flex;align-items:center;justify-content:center;max-width:1100px;margin:2.3rem auto 2.1rem auto;padding:3.2rem 2.2rem 3.2rem 2.2rem;background:linear-gradient(92deg,#f7faff 40%,#e3efff 100%);border-radius:2.2rem;box-shadow:0 2px 24px rgba(0,0,0,0.09);gap:3.8rem;">
+        <div class="hero-left" style="flex:1;min-width:290px;">
+          <h1 style="font-size:2.6rem;font-weight:800;margin-bottom:1.1rem;color:#16377a;line-height:1.16;">
+            AI-Powered Cover Letters, Instantly
+          </h1>
+          <p class="landing-tagline" style="font-size:1.18rem;margin-bottom:1.5rem;">
+            Upload your resume (PDF only), paste a job description, pick your tone, and generate a tailored cover letter with ATS match score.<br>
+            <strong>Try your first cover letter free – account required for all features and demo.</strong>
+          </p>
+          <button class="cta-btn" onclick="document.getElementById('auth-section').scrollIntoView({behavior: 'smooth'});"
+            style="display:inline-block;margin-bottom:2.1rem;font-size:1.22rem;padding:1.2rem 3.1rem;border-radius:2.2rem;background:#007bff;color:#fff;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,0.13);border:none;cursor:pointer;transition:background 0.18s;">
+            Sign Up Free
+          </button>
+          <ol class="how-it-works" style="margin-top:0.7rem;font-size:1.08rem;padding-left:1.2rem;">
+            <li><b>1.</b> Upload your Resume (PDF only)</li>
+            <li><b>2.</b> Paste the Job Description</li>
+            <li><b>3.</b> Choose your Tone</li>
+            <li><b>4.</b> Click “Generate” – Done!</li>
+          </ol>
+        </div>
+        <div class="hero-right" style="flex:1;display:flex;justify-content:center;align-items:center;">
+          <img src="https://cdn.openai.com/tailormyletter/cover-ai-illustration.svg" alt="Cover letter AI illustration" style="max-width:340px;width:100%;border-radius:2.1rem;box-shadow:0 2px 14px rgba(0,0,0,0.04);"/>
+        </div>
       </div>
     </section>
 
-    <section class="privacy-promise" style="margin: 2rem auto 1.5rem auto; max-width: 560px; background: #f9fcff; border-radius: 1.2rem; box-shadow: 0 1px 14px rgba(0,0,0,0.04); padding: 1.1rem 2rem 1.1rem 2rem;">
-      <h2 style="font-size: 1.13rem; font-weight: 700; margin-bottom: 0.7rem;">Privacy Promise</h2>
-      <ul style="padding-left: 1.3rem; font-size: 1.05rem;">
+    <section class="privacy-promise" style="margin:2rem auto 1.5rem auto;max-width:560px;background:#f9fcff;border-radius:1.2rem;box-shadow:0 1px 14px rgba(0,0,0,0.04);padding:1.1rem 2rem 1.1rem 2rem;">
+      <h2 style="font-size:1.13rem;font-weight:700;margin-bottom:0.7rem;">Privacy Promise</h2>
+      <ul style="padding-left:1.3rem;font-size:1.05rem;">
         <li>No resume is ever stored on our servers.</li>
         <li>Payment is always secure (powered by Stripe).</li>
         <li>No spam, no tricks – just results. <b>We may show ads to keep your first cover letter free.</b></li>
@@ -72,16 +86,6 @@
         <li>Pay-per-use, no subscriptions</li>
         <li>Works for students, grads, and professionals worldwide</li>
       </ul>
-    </section>
-
-    <section class="how-it-works-section" style="margin:2.1rem auto 1.5rem auto;max-width:510px;">
-      <h2 style="font-size: 1.2rem; font-weight:700; margin-bottom:0.75rem;">How it Works</h2>
-      <ol class="how-it-works" style="font-size:1.05rem; padding-left:1.3rem;">
-        <li><b>1.</b> Upload your Resume (PDF only)</li>
-        <li><b>2.</b> Paste the Job Description</li>
-        <li><b>3.</b> Choose your Tone</li>
-        <li><b>4.</b> Click “Generate” – Done!</li>
-      </ol>
     </section>
 
     <section class="testimonials-section" style="margin:2.2rem auto 1.8rem auto;">
