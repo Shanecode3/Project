@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tailormyletter.vercel.app/sitemap.xml
