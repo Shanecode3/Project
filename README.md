@@ -140,6 +140,6 @@ For major changes, please open an issue first to discuss your ideas.
 ## Contact
 
 Questions or feedback?  
-Open an issue on GitHub or use the [Discussions](https://github.com/Shanecode3/tailormyletter/discussions) tab.
+Open an issue on GitHub or use the [Discussions](https://github.com/Shanecode3/TailorMyLetter/discussions) tab.
 
 ---
